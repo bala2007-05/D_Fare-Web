@@ -1,0 +1,99 @@
+D-FARE MANAGEMENT DASHBOARD - INSTALLATION INSTRUCTIONS
+========================================================
+
+QUICK INSTALL (3 STEPS)
+-----------------------
+
+1. Open Terminal/Command Prompt in this folder
+
+2. Install dependencies:
+   npm install
+
+3. Start the development server:
+   npm run dev
+
+4. Open your browser:
+   http://localhost:3000
+
+That's it! The dashboard will load with mock data.
+
+WHAT YOU'LL SEE
+---------------
+✓ Professional enterprise dashboard interface
+✓ 5 real-time metric cards
+✓ Searchable driver monitoring table
+✓ Tabbed task queue interface
+✓ 3 interactive analytics charts (ECharts)
+✓ AI explainability panel
+✓ Smooth animations and transitions
+
+SYSTEM REQUIREMENTS
+-------------------
+- Node.js 16.x or higher
+- npm 8.x or higher
+- Modern web browser (Chrome, Firefox, Safari, Edge)
+- 2GB free disk space
+- Internet connection (for initial npm install)
+
+TROUBLESHOOTING
+---------------
+
+Problem: "npm not found"
+Solution: Install Node.js from https://nodejs.org
+
+Problem: "Port 3000 already in use"
+Solution: Use different port: npm run dev -- -p 3001
+
+Problem: "Module not found"
+Solution: Delete node_modules and reinstall:
+  rm -rf node_modules
+  npm install
+
+Problem: Dependencies won't install
+Solution: Clear npm cache:
+  npm cache clean --force
+  npm install
+
+NEXT STEPS
+----------
+1. Explore the dashboard interface
+2. Check the mock data in lib/mockData.js
+3. Read QUICK_START.md for detailed guide
+4. Review COMPONENTS.md for API documentation
+5. Customize colors in tailwind.config.js
+
+BUILD FOR PRODUCTION
+--------------------
+npm run build
+npm start
+
+The production build will be optimized and ready for deployment.
+
+DOCUMENTATION
+-------------
+README.md         - Project overview
+QUICK_START.md    - Getting started guide (recommended)
+SETUP.md          - Detailed setup instructions
+ARCHITECTURE.md   - Technical architecture
+COMPONENTS.md     - Component API reference
+PROJECT_SUMMARY.md - Complete project summary
+
+SUPPORT
+-------
+All components include inline documentation.
+Check code comments for detailed explanations.
+
+TECH STACK
+----------
+- Next.js 14 (React framework)
+- React 18 (UI library)
+- Tailwind CSS 3 (Styling)
+- TanStack Query (Data fetching)
+- Apache ECharts (Charts)
+- Lucide React (Icons)
+
+========================================================
+D-FARE Management Dashboard v1.0.0
+Enterprise-Grade AI-Powered Dispatch System
+Built with Next.js, React, and Tailwind CSS
+========================================================
