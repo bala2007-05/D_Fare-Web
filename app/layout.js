@@ -1,15 +1,19 @@
-import './globals.css';
+'use client';
 
-export const metadata = {
-  title: 'D-FARE Management Dashboard',
-  description: 'AI-Powered Fair Dispatch System - Management Console',
-  viewport: 'width=device-width, initial-scale=1',
-};
+import './globals.css';
+import { RoleProvider } from '@/lib/roleContext';
+import { ProviderProvider } from '@/lib/providerContext';
 
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        <ProviderProvider>
+          <RoleProvider>
+            {children}
+          </RoleProvider>
+        </ProviderProvider>
+      </body>
     </html>
   );
 }
