@@ -7,22 +7,30 @@ import {
   ClipboardList, 
   BarChart3, 
   Activity, 
-  Clock 
+  Clock,
+  Truck
 } from 'lucide-react';
 import Badge from '@/components/ui/Badge';
 import { formatTime, cn } from '@/lib/utils';
 
 const navigation = [
-  { name: 'Dashboard', href: '#dashboard', icon: LayoutDashboard },
-  { name: 'Drivers', href: '#drivers', icon: Users },
-  { name: 'Tasks', href: '#tasks', icon: ClipboardList },
-  { name: 'Fairness Analytics', href: '#analytics', icon: BarChart3 },
+  { name: 'Dashboard', icon: LayoutDashboard },
+  { name: 'Orders', icon: ClipboardList },
+  { name: 'Drivers', icon: Users },
+  { name: 'Vehicles', icon: Truck },
+  { name: 'Routes', icon: BarChart3 },
+  { name: 'Fairness Analytics', icon: BarChart3 },
 ];
 
-export default function TopBar() {
+import RoleSelector from './RoleSelector';
+import HubSelector from './HubSelector';
+import { useProvider } from '@/lib/providerContext';
+import { LogOut } from 'lucide-react';
+
+export default function TopBar({ activeTab, setActiveTab }) {
+  const { logout, providerData } = useProvider();
   const [currentTime, setCurrentTime] = useState(new Date());
   const [lastUpdate, setLastUpdate] = useState(new Date());
-  const [activeTab, setActiveTab] = useState('Dashboard');
 
   useEffect(() => {
     // Update current time every second
@@ -52,12 +60,20 @@ export default function TopBar() {
           </div>
           <div>
             <h1 className="text-lg font-bold text-slate-900">D-FARE</h1>
-            <p className="text-xs text-slate-500">Management Console</p>
+            <p className="text-xs text-slate-500">
+              {providerData?.name || 'Management Console'}
+            </p>
           </div>
         </div>
 
         {/* Right side - Status indicators */}
-        <div className="flex items-center gap-6">
+        <div className="flex items-center gap-4">
+          {/* Hub Selector */}
+          <HubSelector />
+          
+          {/* Role Selector */}
+          <RoleSelector />
+          
           {/* Live Status */}
           <div className="flex items-center gap-2">
             <Badge variant="operational" dot>
@@ -83,7 +99,7 @@ export default function TopBar() {
           </div>
 
           {/* Current Time */}
-          <div className="pl-6 border-l border-slate-200">
+          <div className="pl-4 border-l border-slate-200">
             <div className="text-sm font-medium text-slate-900">
               {currentTime.toLocaleTimeString('en-US', {
                 hour: '2-digit',
@@ -99,6 +115,15 @@ export default function TopBar() {
               })}
             </div>
           </div>
+
+          {/* Logout Button */}
+          <button
+            onClick={logout}
+            className="p-2 hover:bg-slate-100 rounded-lg transition-colors"
+            title="Logout"
+          >
+            <LogOut className="w-5 h-5 text-slate-600" />
+          </button>
         </div>
       </div>
 
@@ -109,13 +134,9 @@ export default function TopBar() {
           const isActive = activeTab === item.name;
           
           return (
-            <a
+            <button
               key={item.name}
-              href={item.href}
-              onClick={(e) => {
-                e.preventDefault();
-                setActiveTab(item.name);
-              }}
+              onClick={() => setActiveTab(item.name)}
               className={cn(
                 'flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all',
                 isActive
@@ -125,7 +146,7 @@ export default function TopBar() {
             >
               <Icon className="w-4 h-4" />
               <span>{item.name}</span>
-            </a>
+            </button>
           );
         })}
       </nav>
