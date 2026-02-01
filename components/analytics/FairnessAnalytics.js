@@ -309,7 +309,7 @@ export default function FairnessAnalytics() {
       <Card>
         <CardHeader>
           <CardTitle>Workload Distribution</CardTitle>
-          <p className="text-sm text-slate-500 mt-1">
+          <p className="text-sm mt-1" style={{ color: 'rgba(255,255,255,0.6)' }}>
             Current workload scores across active drivers
           </p>
         </CardHeader>
@@ -326,7 +326,7 @@ export default function FairnessAnalytics() {
       <Card>
         <CardHeader>
           <CardTitle>Fairness Trend (Today)</CardTitle>
-          <p className="text-sm text-slate-500 mt-1">
+          <p className="text-sm mt-1" style={{ color: 'rgba(255,255,255,0.6)' }}>
             System fairness score over time
           </p>
         </CardHeader>
@@ -343,7 +343,7 @@ export default function FairnessAnalytics() {
       <Card className="lg:col-span-2">
         <CardHeader>
           <CardTitle>Driver Effort Comparison</CardTitle>
-          <p className="text-sm text-slate-500 mt-1">
+          <p className="text-sm mt-1" style={{ color: 'rgba(255,255,255,0.6)' }}>
             Total tasks completed today by each driver
           </p>
         </CardHeader>

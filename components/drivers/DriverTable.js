@@ -1,53 +1,55 @@
 'use client';
 
 import { useState, useMemo } from 'react';
-import { Search } from 'lucide-react';
+import { Search, RefreshCw } from 'lucide-react';
 import Card, { CardHeader, CardContent, CardTitle } from '@/components/ui/Card';
 import Badge from '@/components/ui/Badge';
 import Input from '@/components/ui/Input';
 import Select from '@/components/ui/Select';
-import EmptyState from '@/components/ui/EmptyState';
-import { drivers } from '@/lib/mockData';
-import { formatStatus, getWorkloadColor, cn } from '@/lib/utils';
+import { driversEnhanced, DRIVER_STATUS } from '@/lib/enterpriseMockData';
+import { formatRelativeTime } from '@/lib/utils';
 
-export default function DriverTable() {
+export default function DriverTable({ onDriverClick, selectedDriver }) {
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
-  const [vehicleFilter, setVehicleFilter] = useState('all');
+  const [lastRefresh, setLastRefresh] = useState(new Date());
 
-  // Filter and search logic
   const filteredDrivers = useMemo(() => {
-    return drivers.filter((driver) => {
+    return driversEnhanced.filter((driver) => {
       const matchesSearch = 
         driver.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        driver.id.toLowerCase().includes(searchQuery.toLowerCase());
+        driver.driverId.toLowerCase().includes(searchQuery.toLowerCase());
       
-      const matchesStatus = 
-        statusFilter === 'all' || driver.status === statusFilter;
+      const matchesStatus = statusFilter === 'all' || driver.status === statusFilter;
       
-      const matchesVehicle = 
-        vehicleFilter === 'all' || driver.vehicleType === vehicleFilter;
-      
-      return matchesSearch && matchesStatus && matchesVehicle;
+      return matchesSearch && matchesStatus;
     });
-  }, [searchQuery, statusFilter, vehicleFilter]);
-
-  // Get unique vehicle types for filter
-  const vehicleTypes = [...new Set(drivers.map(d => d.vehicleType))];
+  }, [searchQuery, statusFilter]);
 
   return (
     <Card>
       <CardHeader>
         <div className="flex items-center justify-between">
-          <CardTitle>Real-Time Driver Monitoring</CardTitle>
-          <div className="text-sm text-slate-500">
-            {filteredDrivers.length} of {drivers.length} drivers
+          <div>
+            <CardTitle>Driver Intelligence</CardTitle>
+            <p className="text-sm mt-1" style={{ color: 'rgba(255,255,255,0.6)' }}>
+              {filteredDrivers.length} active drivers · Click to view details
+            </p>
           </div>
+          <button
+            onClick={() => setLastRefresh(new Date())}
+            className="flex items-center gap-2 px-3 py-2 bg-slate-100 hover:bg-slate-200 rounded-lg transition-colors text-sm"
+          >
+            <RefreshCw className="w-4 h-4" />
+            <span className="text-xs text-slate-500">
+              Updated {formatRelativeTime(lastRefresh.toISOString())}
+            </span>
+          </button>
         </div>
         
         {/* Filters */}
         <div className="flex items-center gap-3 mt-4">
-          <div className="relative flex-1 max-w-xs">
+          <div className="relative flex-1 max-w-md">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
             <Input
               type="text"
@@ -61,105 +63,61 @@ export default function DriverTable() {
           <Select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
-            className="w-40"
+            className="w-48"
           >
             <option value="all">All Status</option>
-            <option value="online">Online</option>
-            <option value="busy">Busy</option>
-            <option value="offline">Offline</option>
-          </Select>
-          
-          <Select
-            value={vehicleFilter}
-            onChange={(e) => setVehicleFilter(e.target.value)}
-            className="w-40"
-          >
-            <option value="all">All Vehicles</option>
-            {vehicleTypes.map(type => (
-              <option key={type} value={type}>{type}</option>
-            ))}
+            <option value={DRIVER_STATUS.IDLE}>Idle</option>
+            <option value={DRIVER_STATUS.BUSY}>Busy</option>
+            <option value={DRIVER_STATUS.ON_BREAK}>On Break</option>
+            <option value={DRIVER_STATUS.OFFLINE}>Offline</option>
           </Select>
         </div>
       </CardHeader>
 
       <CardContent className="p-0">
-        {filteredDrivers.length === 0 ? (
-          <EmptyState
-            icon={Search}
-            title="No drivers found"
-            description="Try adjusting your filters or search query"
-          />
-        ) : (
-          <div className="overflow-x-auto custom-scrollbar">
-            <table className="w-full">
-              <thead className="bg-slate-50 border-y border-slate-200 sticky top-0">
-                <tr>
-                  <th className="px-6 py-3 text-left text-xs font-semibold text-slate-700 uppercase tracking-wider">
-                    Driver
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-semibold text-slate-700 uppercase tracking-wider">
-                    Status
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-semibold text-slate-700 uppercase tracking-wider">
-                    Vehicle
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-semibold text-slate-700 uppercase tracking-wider">
-                    Workload Score
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-semibold text-slate-700 uppercase tracking-wider">
-                    Tasks Today
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-semibold text-slate-700 uppercase tracking-wider">
-                    Current Task
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-200 bg-white">
-                {filteredDrivers.map((driver) => (
-                  <tr 
-                    key={driver.id} 
-                    className="hover:bg-slate-50 transition-colors"
-                  >
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div>
-                        <div className="text-sm font-medium text-slate-900">
-                          {driver.name}
-                        </div>
-                        <div className="text-xs text-slate-500">
-                          {driver.id}
-                        </div>
+        <div className="overflow-x-auto custom-scrollbar">
+          <table className="w-full">
+            <thead className="bg-slate-50 border-y border-slate-200">
+              <tr>
+                <th className="px-6 py-4 text-left text-xs font-semibold text-slate-700 uppercase tracking-wide">
+                  Driver Name
+                </th>
+                <th className="px-6 py-4 text-left text-xs font-semibold text-slate-700 uppercase tracking-wide">
+                  Status
+                </th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-slate-200">
+              {filteredDrivers.map((driver) => (
+                <tr 
+                  key={driver.driverId}
+                  onClick={() => onDriverClick(driver)}
+                  className={`
+                    hover:bg-blue-50 transition-all cursor-pointer
+                    ${selectedDriver?.driverId === driver.driverId ? 'bg-blue-100 border-l-4 border-blue-600' : ''}
+                  `}
+                >
+                  <td className="px-6 py-4">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center text-white font-semibold shadow-md">
+                        {driver.name.split(' ').map(n => n[0]).join('')}
                       </div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <Badge variant={driver.status} dot>
-                        {formatStatus(driver.status)}
-                      </Badge>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-600">
-                      {driver.vehicleType}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <span className={cn(
-                        'text-sm font-semibold',
-                        getWorkloadColor(driver.workloadScore)
-                      )}>
-                        {driver.workloadScore.toFixed(1)}
-                      </span>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-900 font-medium">
-                      {driver.tasksToday}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-600">
-                      {driver.currentTask || (
-                        <span className="text-slate-400">—</span>
-                      )}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        )}
+                      <div>
+                        <div className="text-sm font-semibold text-slate-900">{driver.name}</div>
+                        <div className="text-xs text-slate-500 font-mono">{driver.driverId}</div>
+                      </div>
+                    </div>
+                  </td>
+                  <td className="px-6 py-4">
+                    <Badge variant={driver.status} dot>
+                      {driver.status.replace(/_/g, ' ')}
+                    </Badge>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </CardContent>
     </Card>
   );

@@ -30,7 +30,7 @@ export default function RouteMonitoring() {
               <div className="flex items-center justify-between">
                 <div>
                   <CardTitle>{route.routeId}</CardTitle>
-                  <p className="text-sm text-slate-500 mt-1">Driver: {route.driverId}</p>
+                  <p className="text-sm mt-1" style={{ color: 'rgba(255,255,255,0.6)' }}>Driver: {route.driverId}</p>
                 </div>
                 <Badge variant={route.status === 'in_progress' ? 'in_progress' : 'completed'}>
                   {route.status.replace(/_/g, ' ')}

@@ -1,0 +1,7 @@
+Place your login-bg.png file in this directory.
+The background will use a gradient placeholder until the image is added.
+
+Recommended image:
+- Size: 1920x1080 or larger
+- Type: PNG or JPG
+- Content: Dark logistics/warehouse/delivery themed background

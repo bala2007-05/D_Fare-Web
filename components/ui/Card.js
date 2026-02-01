@@ -4,10 +4,14 @@ export default function Card({ children, className, hover = false }) {
   return (
     <div
       className={cn(
-        'bg-white rounded-lg border border-slate-200 shadow-card transition-all',
-        hover && 'hover:shadow-card-hover hover:border-slate-300',
+        'rounded-xl transition-all duration-200',
         className
       )}
+      style={{
+        background: '#0F2A47',
+        border: '1px solid rgba(226, 169, 75, 0.2)',
+        boxShadow: '0 4px 12px rgba(0,0,0,0.3)'
+      }}
     >
       {children}
     </div>
@@ -16,7 +20,10 @@ export default function Card({ children, className, hover = false }) {
 
 export function CardHeader({ children, className }) {
   return (
-    <div className={cn('px-6 py-4 border-b border-slate-200', className)}>
+    <div className={cn('px-6 py-5', className)} style={{
+      borderBottom: '1px solid rgba(226, 169, 75, 0.2)',
+      background: 'rgba(226, 169, 75, 0.05)'
+    }}>
       {children}
     </div>
   );
@@ -32,7 +39,10 @@ export function CardContent({ children, className }) {
 
 export function CardTitle({ children, className }) {
   return (
-    <h3 className={cn('text-base font-semibold text-slate-900', className)}>
+    <h3 className={cn('text-base tracking-tight', className)} style={{ 
+      color: '#E2A94B',
+      fontWeight: 600
+    }}>
       {children}
     </h3>
   );
