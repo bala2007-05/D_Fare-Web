@@ -28,25 +28,34 @@ export default function HubSelector() {
     <div className="relative" ref={dropdownRef}>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-2 px-3 py-2 rounded-lg bg-slate-100 hover:bg-slate-200 transition-colors"
+        className="flex items-center gap-2 px-3 py-2 rounded-lg transition-colors"
+        style={{
+          background: 'rgba(226, 169, 75, 0.1)',
+          border: '1px solid rgba(226, 169, 75, 0.3)'
+        }}
+        onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(226, 169, 75, 0.2)'}
+        onMouseLeave={(e) => e.currentTarget.style.background = 'rgba(226, 169, 75, 0.1)'}
       >
-        <MapPin className="w-4 h-4 text-slate-600" />
+        <MapPin className="w-4 h-4" style={{ color: '#E2A94B' }} />
         <div className="text-left">
-          <div className="text-xs text-slate-500">Current Hub</div>
-          <div className="text-sm font-medium text-slate-900">
+          <div className="text-xs" style={{ color: 'rgba(255,255,255,0.6)' }}>Current Hub</div>
+          <div className="text-sm font-medium" style={{ color: 'white' }}>
             {currentHub?.name || 'Select Hub'}
           </div>
         </div>
         <ChevronDown className={cn(
-          'w-4 h-4 text-slate-400 transition-transform',
+          'w-4 h-4 transition-transform',
           isOpen && 'rotate-180'
-        )} />
+        )} style={{ color: '#E2A94B' }} />
       </button>
 
       {isOpen && (
-        <div className="absolute right-0 top-full mt-2 w-72 bg-white rounded-lg shadow-lg border border-slate-200 py-2 z-50">
-          <div className="px-3 py-2 border-b border-slate-200">
-            <p className="text-xs font-semibold text-slate-500 uppercase">Switch Hub</p>
+        <div className="absolute right-0 top-full mt-2 w-72 rounded-lg shadow-lg py-2 z-50" style={{
+          background: '#0F2A47',
+          border: '1px solid rgba(226, 169, 75, 0.3)'
+        }}>
+          <div className="px-3 py-2" style={{ borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
+            <p className="text-xs font-semibold uppercase" style={{ color: '#E2A94B' }}>Switch Hub</p>
           </div>
           {providerData.hubs.map((hub) => (
             <button
@@ -55,30 +64,33 @@ export default function HubSelector() {
                 switchHub(hub.id);
                 setIsOpen(false);
               }}
-              className={cn(
-                'w-full px-3 py-3 text-left hover:bg-slate-50 transition-colors',
-                selectedHub === hub.id && 'bg-primary-50'
-              )}
+              className="w-full px-3 py-3 text-left transition-colors"
+              style={{
+                background: selectedHub === hub.id ? 'rgba(226, 169, 75, 0.1)' : 'transparent'
+              }}
+              onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(226, 169, 75, 0.15)'}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background = selectedHub === hub.id ? 'rgba(226, 169, 75, 0.1)' : 'transparent';
+              }}
             >
               <div className="flex items-start justify-between">
                 <div className="flex-1">
-                  <div className={cn(
-                    'text-sm font-semibold',
-                    selectedHub === hub.id ? 'text-primary-700' : 'text-slate-900'
-                  )}>
+                  <div className="text-sm font-semibold" style={{
+                    color: selectedHub === hub.id ? '#E2A94B' : 'white'
+                  }}>
                     {hub.name}
                   </div>
-                  <div className="text-xs text-slate-500 mt-1">
+                  <div className="text-xs mt-1" style={{ color: 'rgba(255,255,255,0.5)' }}>
                     ID: {hub.id}
                   </div>
                   {hub.serviceAreas && (
-                    <div className="text-xs text-slate-400 mt-1">
+                    <div className="text-xs mt-1" style={{ color: 'rgba(255,255,255,0.4)' }}>
                       {hub.serviceAreas.join(', ')}
                     </div>
                   )}
                 </div>
                 {selectedHub === hub.id && (
-                  <span className="text-xs text-primary-600 font-semibold">Active</span>
+                  <span className="text-xs font-semibold" style={{ color: '#E2A94B' }}>Active</span>
                 )}
               </div>
             </button>

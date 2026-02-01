@@ -90,7 +90,7 @@ export default function OrderTable({ onOrderClick }) {
         <div className="flex items-center justify-between">
           <div>
             <CardTitle>Order Management</CardTitle>
-            <p className="text-sm text-slate-500 mt-1">
+            <p className="text-sm mt-1" style={{ color: 'rgba(255,255,255,0.6)' }}>
               {filteredOrders.length} of {orders.length} orders
             </p>
           </div>

@@ -2,67 +2,698 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer base {
-  * {
-    @apply border-slate-200;
+/* ============================================
+   D-FARE GLOBAL BRAND THEME
+   ============================================ */
+
+/* CSS Variables - Brand Colors */
+:root {
+  /* Primary Colors */
+  --primary-color: #0b1f3a;
+  --primary-dark: #050f23;
+  --primary-light: #1a3a5c;
+  
+  /* Secondary Colors - D-FARE Brand */
+  --secondary-color: #0F2A47;
+  --secondary-hover: #0c2239;
+  --secondary-light: #1a3a5c;
+  
+  /* Accent Colors - D-FARE Brand */
+  --accent-gold: #E2A94B;
+  --accent-gold-light: #F5C76B;
+  
+  /* Background Colors */
+  --card-bg: rgba(15, 23, 42, 0.85);
+  --card-bg-hover: rgba(15, 23, 42, 0.92);
+  --navbar-bg: linear-gradient(90deg, #0b1f3a, #0f172a);
+  --overlay-dark: rgba(5, 15, 35, 0.75);
+  
+  /* Text Colors */
+  --text-light: #f8fafc;
+  --text-muted: #cbd5e1;
+  --text-gray: #94a3b8;
+  --text-dark: #1e293b;
+  
+  /* Border & Shadow */
+  --border-color: rgba(255, 255, 255, 0.1);
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.2);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.3);
+  --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.4);
+  --shadow-xl: 0 20px 50px rgba(0, 0, 0, 0.5);
+}
+
+/* ============================================
+   GLOBAL BACKGROUND
+   ============================================ */
+
+html {
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  background-image: url('https://i.ibb.co/f3ZnjVq/Whats-App-Image-2026-01-31-at-4-34-40-PM.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  position: relative;
+  overflow-x: hidden;
+  background: transparent;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+  color: var(--text-light);
+}
+
+/* ============================================
+   NAVIGATION BAR
+   ============================================ */
+
+nav,
+.navbar {
+  background: var(--navbar-bg) !important;
+  color: var(--text-light) !important;
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--border-color);
+  box-shadow: var(--shadow-md);
+}
+
+nav a,
+.navbar a {
+  color: var(--text-light);
+  transition: color 0.3s ease;
+}
+
+nav a:hover,
+.navbar a:hover {
+  color: var(--secondary-color);
+}
+
+/* ============================================
+   CARDS & PANELS - ADMIN THEME
+   ============================================ */
+
+.card,
+.panel,
+.driver-card,
+.driver-panel,
+.detail-panel,
+[class*="card"]:not(.login-card):not(.registration-modal),
+[class*="panel"]:not(.login-page) {
+  background: #0F2A47 !important;
+  backdrop-filter: blur(8px);
+  border-radius: 12px;
+  color: white;
+  border: 1px solid rgba(226, 169, 75, 0.2);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  transition: all 0.3s ease;
+}
+
+.card:hover,
+.driver-card:hover {
+  box-shadow: 0 6px 20px rgba(226, 169, 75, 0.2);
+  border-color: rgba(226, 169, 75, 0.3);
+}
+
+/* White cards (special cases like map overlays) */
+.card-white,
+.floating-panel,
+.driver-detail-panel {
+  background: #0F2A47 !important;
+  color: white;
+  backdrop-filter: blur(12px);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+  border: 1px solid rgba(226, 169, 75, 0.3);
+}
+
+/* ============================================
+   BUTTONS
+   ============================================ */
+
+.primary-btn,
+button[class*="primary"],
+.btn-primary {
+  background: var(--secondary-color);
+  color: white;
+  border-radius: 8px;
+  padding: 10px 20px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+}
+
+.primary-btn:hover,
+button[class*="primary"]:hover,
+.btn-primary:hover {
+  background: var(--secondary-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(37, 99, 235, 0.4);
+}
+
+.secondary-btn,
+.btn-secondary {
+  background: transparent;
+  color: var(--secondary-color);
+  border: 2px solid var(--secondary-color);
+  border-radius: 8px;
+  padding: 10px 20px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.secondary-btn:hover,
+.btn-secondary:hover {
+  background: var(--secondary-color);
+  color: white;
+  transform: translateY(-2px);
+}
+
+.gold-btn,
+.btn-gold {
+  background: linear-gradient(135deg, var(--accent-gold-light), var(--accent-gold));
+  color: var(--primary-dark);
+  border-radius: 8px;
+  padding: 10px 20px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(212, 160, 23, 0.3);
+}
+
+.gold-btn:hover,
+.btn-gold:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(212, 160, 23, 0.4);
+}
+
+/* ============================================
+   LINKS & HIGHLIGHTS
+   ============================================ */
+
+a {
+  color: var(--secondary-color);
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+a:hover {
+  color: var(--secondary-light);
+  text-decoration: underline;
+}
+
+.highlight,
+.text-highlight {
+  color: var(--secondary-color);
+  font-weight: 600;
+}
+
+/* ============================================
+   FORMS & INPUTS
+   ============================================ */
+
+input,
+textarea,
+select {
+  background: rgba(15, 23, 42, 0.7);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 10px 14px;
+  color: var(--text-light);
+  transition: all 0.3s ease;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  outline: none;
+  border-color: var(--secondary-color);
+  box-shadow: 0 0 0 3px rgba(15, 42, 71, 0.2);
+  background: rgba(15, 23, 42, 0.9);
+}
+
+input::placeholder,
+textarea::placeholder,
+select::placeholder {
+  color: #0F2A47;
+  opacity: 0.7;
+}
+
+/* ============================================
+   MAP PANEL
+   ============================================ */
+
+.map-panel,
+#logistics-map,
+#driver-map {
+  box-shadow: var(--shadow-lg);
+  border-radius: 14px;
+  overflow: hidden;
+  border: 2px solid var(--border-color);
+}
+
+/* Leaflet popup styling */
+.leaflet-popup-content-wrapper {
+  background: rgba(255, 255, 255, 0.98);
+  backdrop-filter: blur(10px);
+  border-radius: 12px;
+  box-shadow: var(--shadow-xl);
+}
+
+.leaflet-popup-tip {
+  background: rgba(255, 255, 255, 0.98);
+  backdrop-filter: blur(10px);
+}
+
+/* ============================================
+   LOGIN & AUTH PAGES
+   ============================================ */
+
+.login-page {
+  min-height: 100vh;
+  background-image: url('https://i.ibb.co/f3ZnjVq/Whats-App-Image-2026-01-31-at-4-34-40-PM.jpg');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  position: relative;
+}
+
+/* Dark overlay for contrast and readability */
+.login-page::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  z-index: 0;
+}
+
+.login-logo {
+  width: 180px;
+  height: auto;
+  margin-bottom: 2px;
+  display: block;
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.5));
+  position: relative;
+  z-index: 1;
+}
+
+.login-subtitle {
+  color: #0F2A47;
+  font-size: 22px;
+  font-weight: 600;
+  margin-top: 0;
+  margin-bottom: 16px;
+  margin-block-start: 0;
+  margin-block-end: 16px;
+  line-height: 1.2;
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.6);
+  position: relative;
+  z-index: 1;
+}
+
+.login-card,
+.auth-card,
+.registration-modal {
+  position: relative;
+  z-index: 1;
+  background: #0F2A47 !important;
+  border-radius: 16px;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.5);
+  border: 2px solid rgba(226, 169, 75, 0.2);
+  padding: 32px;
+  width: 100%;
+  max-width: 380px;
+  margin: 0 auto;
+  color: white;
+}
+
+.login-card input,
+.auth-card input {
+  background: #0c2239;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: white;
+}
+
+.login-card input:focus,
+.auth-card input:focus {
+  border-color: #E2A94B;
+  box-shadow: 0 0 0 2px rgba(226, 169, 75, 0.3);
+  background: #0c2239;
+  outline: none;
+}
+
+.login-card input::placeholder,
+.auth-card input::placeholder {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.login-btn {
+  background: #0F2A47;
+  color: white;
+  border-radius: 8px;
+  font-weight: 600;
+  box-shadow: 0 4px 12px rgba(15, 42, 71, 0.4);
+  transition: all 0.3s ease;
+  border: none;
+}
+
+.login-btn:hover:not(:disabled) {
+  background: #0c2239;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(15, 42, 71, 0.5);
+}
+
+.login-card h1,
+.login-card h2,
+.auth-card h1,
+.auth-card h2 {
+  color: #E2A94B;
+  font-weight: 600;
+}
+
+.login-card label,
+.auth-card label {
+  color: #E2A94B;
+  font-weight: 500;
+  text-align: left;
+}
+
+.login-card form,
+.auth-card form {
+  text-align: left;
+}
+
+.register-link,
+.login-card a,
+.auth-card a {
+  color: #E2A94B;
+  font-weight: 600;
+  transition: color 0.3s ease;
+}
+
+.register-link:hover,
+.login-card a:hover,
+.auth-card a:hover {
+  color: #d1963a;
+}
+
+.login-card button:hover,
+.auth-card button:hover {
+  background: var(--secondary-hover);
+}
+
+/* ============================================
+   DASHBOARD SPECIFIC
+   ============================================ */
+
+.dashboard-container {
+  background: #0F2A47;
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(226, 169, 75, 0.2);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+}
+
+.driver-list-panel {
+  background: var(--card-bg);
+  backdrop-filter: blur(8px);
+  border-right: 1px solid var(--border-color);
+}
+
+.sidebar,
+.main-layout-sidebar {
+  background: var(--primary-color);
+  backdrop-filter: blur(10px);
+  border-right: 1px solid var(--border-color);
+  box-shadow: var(--shadow-lg);
+}
+
+/* ============================================
+   BADGES & STATUS INDICATORS
+   ============================================ */
+
+.badge,
+.status-badge {
+  border-radius: 6px;
+  padding: 4px 10px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.badge-primary {
+  background: rgba(37, 99, 235, 0.2);
+  color: var(--secondary-color);
+  border: 1px solid rgba(37, 99, 235, 0.4);
+}
+
+.badge-success {
+  background: rgba(16, 185, 129, 0.2);
+  color: #10b981;
+  border: 1px solid rgba(16, 185, 129, 0.4);
+}
+
+.badge-warning {
+  background: rgba(245, 158, 11, 0.2);
+  color: #f59e0b;
+  border: 1px solid rgba(245, 158, 11, 0.4);
+}
+
+.badge-danger {
+  background: rgba(255, 100, 100, 0.2);
+  color: white;
+  border: 1px solid rgba(255, 100, 100, 0.3);
+}
+
+/* ============================================
+   TABLES
+   ============================================ */
+
+table {
+  background: transparent;
+  color: var(--text-light);
+}
+
+thead {
+  background: rgba(226, 169, 75, 0.1);
+  border-bottom: 2px solid rgba(226, 169, 75, 0.2);
+}
+
+thead th {
+  color: #E2A94B;
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 11px;
+  letter-spacing: 0.5px;
+}
+
+tbody tr {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  transition: background 0.2s ease;
+}
+
+tbody tr:hover {
+  background: rgba(226, 169, 75, 0.05);
+}
+
+td {
+  color: white;
+}
+
+/* ============================================
+   SCROLLBARS
+   ============================================ */
+
+.custom-scrollbar::-webkit-scrollbar,
+*::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track,
+*::-webkit-scrollbar-track {
+  background: rgba(15, 23, 42, 0.4);
+  border-radius: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb,
+*::-webkit-scrollbar-thumb {
+  background: rgba(37, 99, 235, 0.6);
+  border-radius: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover,
+*::-webkit-scrollbar-thumb:hover {
+  background: var(--secondary-color);
+}
+
+/* ============================================
+   ANIMATIONS
+   ============================================ */
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.5s ease-out;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.animate-slide-in {
+  animation: slideIn 0.5s ease-out;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(1.05);
+  }
+}
+
+.animate-pulse {
+  animation: pulse 2s ease-in-out infinite;
+}
+
+/* ============================================
+   UTILITY CLASSES
+   ============================================ */
+
+.glass-effect {
+  background: var(--card-bg);
+  backdrop-filter: blur(8px);
+  border: 1px solid var(--border-color);
+}
+
+.glass-effect-white {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.text-primary {
+  color: var(--secondary-color);
+}
+
+.text-gold {
+  color: var(--accent-gold);
+}
+
+.bg-primary {
+  background: var(--primary-color);
+}
+
+.bg-secondary {
+  background: var(--secondary-color);
+}
+
+.border-primary {
+  border-color: var(--border-color);
+}
+
+.shadow-brand {
+  box-shadow: var(--shadow-lg);
+}
+
+.rounded-brand {
+  border-radius: 12px;
+}
+
+/* ============================================
+   RESPONSIVE ADJUSTMENTS
+   ============================================ */
+
+@media (max-width: 768px) {
+  body::before {
+    background: rgba(5, 15, 35, 0.85);
+  }
+  
+  .card,
+  .panel {
+    backdrop-filter: blur(12px);
+    background: rgba(15, 23, 42, 0.95);
+  }
+  
+  .login-card,
+  .auth-card {
+    padding: 24px;
+    background: #0F2A47 !important;
+  }
+}
+
+@media (max-width: 480px) {
+  body::before {
+    background: rgba(5, 15, 35, 0.9);
+  }
+  
+  input,
+  textarea,
+  select,
+  button {
+    font-size: 14px;
+  }
+}
+
+/* ============================================
+   PRINT STYLES
+   ============================================ */
+
+@media print {
+  body::before,
+  body::after {
+    display: none;
   }
   
   body {
-    @apply bg-slate-50 text-slate-900 antialiased;
+    background: white;
+    color: black;
   }
 }
 
-@layer components {
-  /* Custom scrollbar for better UX */
-  .custom-scrollbar::-webkit-scrollbar {
-    @apply w-2 h-2;
-  }
-  
-  .custom-scrollbar::-webkit-scrollbar-track {
-    @apply bg-slate-100;
-  }
-  
-  .custom-scrollbar::-webkit-scrollbar-thumb {
-    @apply bg-slate-300 rounded-full;
-  }
-  
-  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-    @apply bg-slate-400;
-  }
+/* ============================================
+   DARK MODE OVERRIDES (if needed)
+   ============================================ */
 
-  /* Smooth animations */
-  .animate-fade-in {
-    animation: fadeIn 0.3s ease-in-out;
-  }
-
-  @keyframes fadeIn {
-    from {
-      opacity: 0;
-      transform: translateY(4px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
-  /* Pulse animation for live indicators */
-  .animate-pulse-soft {
-    animation: pulseSoft 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-  }
-
-  @keyframes pulseSoft {
-    0%, 100% {
-      opacity: 1;
-    }
-    50% {
-      opacity: 0.7;
-    }
-  }
+[data-theme="dark"] {
+  --text-light: #f8fafc;
+  --text-muted: #cbd5e1;
+  --card-bg: rgba(15, 23, 42, 0.9);
 }
 
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
+[data-theme="light"] {
+  --text-light: #1e293b;
+  --text-muted: #64748b;
+  --card-bg: rgba(255, 255, 255, 0.95);
 }

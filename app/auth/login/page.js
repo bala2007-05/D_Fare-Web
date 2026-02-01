@@ -2,142 +2,235 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { LogIn, Mail, Lock } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { Mail, Lock, CheckCircle } from 'lucide-react';
 import { useProvider } from '@/lib/providerContext';
 import { useRole, ROLES } from '@/lib/roleContext';
-import Link from 'next/link';
+import LogisticsBackground from '@/components/auth/LogisticsBackground';
+import ProfessionalLoadingText from '@/components/auth/ProfessionalLoadingText';
+import RegistrationModal from '@/components/auth/RegistrationModal';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
+  const [showRegistration, setShowRegistration] = useState(false);
   const { login } = useProvider();
   const { setCurrentRole } = useRole();
   const router = useRouter();
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
     setError('');
 
     if (!email || !password) {
-      setError('Please fill in all fields');
+      setError('Please enter both email and password');
       return;
     }
 
-    // Mock login - in real app, validate with backend
-    try {
-      login(email, password);
-      setCurrentRole(ROLES.ADMIN);
-      router.push('/');
-    } catch (err) {
-      setError('Invalid credentials');
-    }
+    setIsLoading(true);
+
+    setTimeout(() => {
+      try {
+        login(email, password);
+        setCurrentRole(ROLES.ADMIN);
+        setIsSuccess(true);
+
+        setTimeout(() => {
+          router.push('/dashboard');
+        }, 1500);
+      } catch (err) {
+        setError('Invalid credentials');
+        setIsLoading(false);
+      }
+    }, 1500);
+  };
+
+  const handleRegistrationComplete = () => {
+    setShowRegistration(false);
+    setError('');
+    setTimeout(() => {
+      alert('Registration successful! Please sign in with your credentials.');
+    }, 300);
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 flex items-center justify-center p-4">
-      <div className="w-full max-w-md">
-        {/* Logo & Branding */}
-        <div className="text-center mb-8">
-          <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-primary-500 to-primary-600 flex items-center justify-center mx-auto mb-4 shadow-lg">
-            <span className="text-white font-bold text-2xl">D</span>
-          </div>
-          <h1 className="text-3xl font-bold text-slate-900 mb-2">D-FARE</h1>
-          <p className="text-slate-600">Fair Dispatch Management System</p>
-          <p className="text-sm text-slate-500 mt-1">Multi-Tenant Logistics Platform</p>
-        </div>
+    <div className="login-page">
+      {/* Loading overlay */}
+      {isLoading && !isSuccess && (
+        <motion.div
+          className="absolute inset-0 bg-slate-950/40 backdrop-blur-sm z-10 flex items-center justify-center"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+        />
+      )}
+
+      {/* Main Content */}
+      <motion.div
+        className="relative z-20 w-full max-w-md px-4"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ 
+          opacity: isSuccess ? 0 : 1, 
+          y: isSuccess ? -20 : 0,
+          scale: isSuccess ? 0.95 : 1
+        }}
+        transition={{ duration: 0.5 }}
+      >
+        {/* Logo */}
+        <motion.div
+          className="text-center mb-8"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.2 }}
+        >
+          <img 
+            src="https://i.ibb.co/pBj9bMp4/logo-removebg-preview.png"
+            alt="D-FARE Logo" 
+            className="login-logo mx-auto mb-3"
+          />
+          <p className="login-subtitle text-sm">Fair Dispatch Management System</p>
+        </motion.div>
 
         {/* Login Card */}
-        <div className="bg-white rounded-2xl shadow-xl border border-slate-200 p-8">
+        <motion.div
+          className="login-card"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3, type: 'spring' }}
+        >
           <div className="mb-6">
-            <h2 className="text-xl font-bold text-slate-900">Sign In</h2>
-            <p className="text-sm text-slate-600 mt-1">Access your dispatch operations</p>
+            <h2 className="text-lg font-semibold">Sign In</h2>
+            <p className="text-sm mt-1" style={{ color: 'rgba(255,255,255,0.7)' }}>Access your dispatch operations</p>
           </div>
 
           <form onSubmit={handleLogin} className="space-y-4">
             {/* Email */}
             <div>
-              <label className="block text-sm font-semibold text-slate-700 mb-2">
-                <Mail className="w-4 h-4 inline mr-1" />
+              <label className="block text-sm font-medium mb-2">
                 Email Address
               </label>
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="you@company.com"
-                className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-lg text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all"
-                required
-              />
+              <div className="relative">
+                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5" style={{ color: '#E2A94B' }} />
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="w-full pl-10 pr-4 py-2.5 rounded-lg transition-all"
+                  placeholder="you@company.com"
+                  disabled={isLoading || isSuccess}
+                  required
+                />
+              </div>
             </div>
 
             {/* Password */}
             <div>
-              <label className="block text-sm font-semibold text-slate-700 mb-2">
-                <Lock className="w-4 h-4 inline mr-1" />
+              <label className="block text-sm font-medium mb-2">
                 Password
               </label>
-              <input
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="••••••••"
-                className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-lg text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all"
-                required
-              />
+              <div className="relative">
+                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5" style={{ color: '#E2A94B' }} />
+                <input
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="w-full pl-10 pr-4 py-2.5 rounded-lg transition-all"
+                  placeholder="••••••••"
+                  disabled={isLoading || isSuccess}
+                  required
+                />
+              </div>
             </div>
 
-            {/* Error Message */}
+            {/* Error */}
             {error && (
-              <div className="p-3 bg-danger-50 border border-danger-200 rounded-lg">
-                <p className="text-sm text-danger-700">{error}</p>
-              </div>
+              <motion.div
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: 'auto' }}
+                className="p-3 bg-red-500/10 border border-red-500/20 rounded-lg"
+              >
+                <p className="text-sm text-red-400">{error}</p>
+              </motion.div>
             )}
 
-            {/* Login Button */}
-            <button
+            {/* Submit Button */}
+            <motion.button
               type="submit"
-              className="w-full bg-primary-600 hover:bg-primary-700 text-white font-semibold py-3 rounded-lg transition-all flex items-center justify-center gap-2 shadow-lg shadow-primary-500/30"
+              disabled={isLoading || isSuccess}
+              className="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+              whileHover={!isLoading && !isSuccess ? { y: -1 } : {}}
+              whileTap={!isLoading && !isSuccess ? { scale: 0.98 } : {}}
             >
-              <LogIn className="w-5 h-5" />
-              Sign In
-            </button>
+              {isLoading && !isSuccess ? (
+                <>
+                  <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                  <span>Signing In</span>
+                </>
+              ) : isSuccess ? (
+                <>
+                  <CheckCircle className="w-5 h-5" />
+                  <span>Success</span>
+                </>
+              ) : (
+                'Sign In'
+              )}
+            </motion.button>
           </form>
 
+          {/* Loading State */}
+          {isLoading && !isSuccess && (
+            <motion.div
+              className="mt-4 pt-4 border-t border-slate-700/50"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+            >
+              <ProfessionalLoadingText />
+            </motion.div>
+          )}
+
           {/* Demo Credentials */}
-          <div className="mt-6 p-4 bg-slate-50 rounded-lg border border-slate-200">
-            <p className="text-xs font-semibold text-slate-700 mb-2">Demo Credentials:</p>
-            <div className="text-xs text-slate-600 space-y-1">
-              <p>Email: <span className="font-mono">demo@organization.com</span></p>
-              <p>Password: <span className="font-mono">demo123</span></p>
+          <div className="mt-6 p-4 rounded-lg" style={{ background: 'rgba(12, 34, 57, 0.5)', border: '1px solid rgba(226, 169, 75, 0.2)' }}>
+            <p className="text-xs font-medium mb-2" style={{ color: '#E2A94B' }}>Demo Credentials</p>
+            <div className="text-xs space-y-1 font-mono" style={{ color: 'rgba(255,255,255,0.6)' }}>
+              <p>demo@organization.com</p>
+              <p>demo123</p>
             </div>
           </div>
 
-          {/* Footer Links */}
-          <div className="mt-6 text-center text-sm text-slate-500 space-y-2">
-            <p>
-              <a href="#" className="text-primary-600 hover:text-primary-700 font-medium">
-                Forgot Password?
-              </a>
-            </p>
-            <div className="pt-3 border-t border-slate-200">
-              <p className="text-xs text-slate-600 mb-2">New Organization?</p>
-              <Link
-                href="/auth/register-organization"
-                className="text-sm font-semibold text-primary-600 hover:text-primary-700 transition-colors inline-flex items-center gap-1"
-              >
-                Register Your Organization →
-              </Link>
-            </div>
+          {/* Registration Link */}
+          <div className="mt-6 text-center text-sm">
+            <span style={{ color: 'rgba(255,255,255,0.7)' }}>New organization? </span>
+            <button
+              onClick={() => setShowRegistration(true)}
+              className="register-link transition-colors"
+              disabled={isLoading}
+            >
+              Register here
+            </button>
           </div>
-        </div>
+        </motion.div>
 
-        {/* Security Notice */}
-        <div className="mt-6 text-center text-xs text-slate-500">
-          <p>🔒 Secure enterprise authentication</p>
-          <p className="mt-1">Your data is isolated and protected</p>
-        </div>
-      </div>
+        {/* Footer */}
+        <motion.div
+          className="mt-6 text-center text-xs"
+          style={{ color: 'rgba(255,255,255,0.6)' }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.5 }}
+        >
+          <p>© 2026 D-FARE Systems. Enterprise Edition.</p>
+          <p className="mt-1">Secure authentication • Data isolation • GDPR compliant</p>
+        </motion.div>
+      </motion.div>
+
+      {/* Registration Modal */}
+      <RegistrationModal
+        isOpen={showRegistration}
+        onClose={() => setShowRegistration(false)}
+        onComplete={handleRegistrationComplete}
+      />
     </div>
   );
 }

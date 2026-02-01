@@ -41,17 +41,10 @@ export default function OperationalOverview() {
       trendValue: '+12',
       subtitle: `${operationalMetrics.successRate}% success rate`,
     },
-    {
-      title: 'System Health',
-      value: operationalMetrics.systemHealth,
-      icon: AlertCircle,
-      color: 'green',
-      subtitle: `Avg response: ${operationalMetrics.avgResponseTime}`,
-    },
   ];
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
       {metrics.map((metric, index) => (
         <MetricCard key={index} {...metric} />
       ))}

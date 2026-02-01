@@ -10,6 +10,10 @@ export default function Select({ className, children, ...props }) {
         'transition-colors cursor-pointer',
         className
       )}
+      style={{
+        color: '#0F2A47',
+        ...props.style
+      }}
       {...props}
     >
       {children}
