@@ -9,19 +9,23 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.94.1",
     "@tanstack/react-query": "^5.17.0",
     "clsx": "^2.1.0",
     "echarts": "^5.4.3",
     "echarts-for-react": "^3.0.2",
     "framer-motion": "^11.0.0",
-    "leaflet": "^1.9.4",
     "lucide-react": "^0.309.0",
+    "maplibre-gl": "^4.7.1",
     "next": "^14.1.0",
+    "papaparse": "^5.5.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-leaflet": "^5.0.0"
+    "resend": "^6.9.1",
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
+    "@types/react": "19.2.11",
     "autoprefixer": "^10.4.17",
     "eslint": "^8.56.0",
     "eslint-config-next": "^14.1.0",

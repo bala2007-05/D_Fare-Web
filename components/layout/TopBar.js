@@ -1,116 +1,65 @@
 'use client';
-
 import { useEffect, useState } from 'react';
-import { 
-  LayoutDashboard, 
-  Users, 
-  ClipboardList, 
-  BarChart3, 
-  Activity, 
-  Clock,
-  Truck
+import {
+  LayoutDashboard,
+  Users,
+  ClipboardList,
+  BarChart3,
 } from 'lucide-react';
-import Badge from '@/components/ui/Badge';
-import { formatTime, cn } from '@/lib/utils';
-
 const navigation = [
   { name: 'Dashboard', icon: LayoutDashboard },
   { name: 'Orders', icon: ClipboardList },
   { name: 'Drivers', icon: Users },
-  { name: 'Vehicles', icon: Truck },
-  { name: 'Routes', icon: BarChart3 },
   { name: 'Fairness Analytics', icon: BarChart3 },
 ];
-
 import RoleSelector from './RoleSelector';
 import HubSelector from './HubSelector';
 import { useProvider } from '@/lib/providerContext';
+import { useAuthActions } from '@/lib/auth/useAuth';
+import { supabase } from '@/lib/supabase/client';
 import { LogOut } from 'lucide-react';
-
 export default function TopBar({ activeTab, setActiveTab }) {
   const { logout, providerData } = useProvider();
+  const { signOut: authSignOut } = useAuthActions();
   const [currentTime, setCurrentTime] = useState(new Date());
-  const [lastUpdate, setLastUpdate] = useState(new Date());
-
   useEffect(() => {
-    // Update current time every second
     const timeInterval = setInterval(() => {
       setCurrentTime(new Date());
     }, 1000);
-
-    // Simulate data refresh every 5 seconds
-    const updateInterval = setInterval(() => {
-      setLastUpdate(new Date());
-    }, 5000);
-
-    return () => {
-      clearInterval(timeInterval);
-      clearInterval(updateInterval);
-    };
+    return () => clearInterval(timeInterval);
   }, []);
-
   return (
     <header className="fixed top-0 right-0 left-0 z-10" style={{
-      background: '#0F2A47',
-      borderBottom: '1px solid rgba(226, 169, 75, 0.2)',
-      boxShadow: '0 4px 12px rgba(0,0,0,0.3)'
+      background: '#ffffff',
+      borderBottom: '1px solid #e2e8f0',
+      boxShadow: '0 1px 3px rgba(0,0,0,0.06)'
     }}>
       {/* Top section with logo and status */}
       <div className="px-6 flex items-center justify-between" style={{ 
         height: '80px',
-        borderBottom: '1px solid rgba(255,255,255,0.1)' 
+        borderBottom: '1px solid #e2e8f0' 
       }}>
         {/* Left side - Logo and Brand */}
         <div className="flex items-center">
-          <img 
-            src="https://i.ibb.co/pBj9bMp4/logo-removebg-preview.png"
+          <img
+            src="/images/logo.png"
             alt="D-FARE Logo"
-            style={{
-              height: '98px',
-              width: 'auto',
-              objectFit: 'contain',
-              opacity: 1,
-              filter: 'drop-shadow(0 6px 16px rgba(255,255,255,0.4)) drop-shadow(0 2px 8px rgba(226, 169, 75, 0.6)) brightness(1.15) contrast(1.1)'
-            }}
+            className="dashboard-logo"
           />
         </div>
-
         {/* Right side - Status indicators */}
         <div className="flex items-center gap-4">
-          {/* Hub Selector */}
           <HubSelector />
-          
-          {/* Role Selector */}
-          <RoleSelector />
-          
-          {/* Live Status */}
-          <div className="flex items-center gap-2">
-            <Badge variant="operational" dot>
-              Live
-            </Badge>
-          </div>
-
-          {/* Last Update Time */}
-          <div className="flex items-center gap-2 text-sm">
-            <Clock className="w-4 h-4" style={{ color: '#E2A94B' }} />
-            <div className="flex flex-col">
-              <span className="text-xs" style={{ color: 'rgba(255,255,255,0.5)' }}>Last update</span>
-              <span className="font-medium" style={{ color: 'rgba(255,255,255,0.9)' }}>
-                {formatTime(lastUpdate.toISOString())}
-              </span>
-            </div>
-          </div>
-
-          {/* Current Time */}
-          <div className="pl-4" style={{ borderLeft: '1px solid rgba(255,255,255,0.1)' }}>
-            <div className="text-sm font-medium" style={{ color: 'white' }}>
+          <RoleSelector onNavigate={(tab) => setActiveTab(tab)} />
+          <div className="pl-4" style={{ borderLeft: '1px solid #e2e8f0' }}>
+            <div className="text-sm font-medium" style={{ color: '#0F172A' }}>
               {currentTime.toLocaleTimeString('en-US', {
                 hour: '2-digit',
                 minute: '2-digit',
                 second: '2-digit',
               })}
             </div>
-            <div className="text-xs" style={{ color: 'rgba(255,255,255,0.6)' }}>
+            <div className="text-xs" style={{ color: '#64748b' }}>
               {currentTime.toLocaleDateString('en-US', {
                 month: 'short',
                 day: 'numeric',
@@ -118,47 +67,52 @@ export default function TopBar({ activeTab, setActiveTab }) {
               })}
             </div>
           </div>
-
-          {/* Logout Button */}
           <button
-            onClick={logout}
+            onClick={() => {
+              if (supabase) authSignOut();
+              else logout();
+            }}
             className="p-2 rounded-lg transition-colors"
-            style={{ color: '#E2A94B' }}
-            onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(226, 169, 75, 0.1)'}
-            onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
+            style={{ background: 'transparent', color: '#64748b' }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.background = '#EFF6FF';
+              e.currentTarget.style.color = '#1F4FD8';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.background = 'transparent';
+              e.currentTarget.style.color = '#64748b';
+            }}
             title="Logout"
           >
             <LogOut className="w-5 h-5" />
           </button>
         </div>
       </div>
-
-      {/* Navigation bar */}
-      <nav className="h-14 px-6 flex items-center gap-2" style={{ background: 'rgba(5, 15, 35, 0.5)' }}>
+      {/* Navigation bar - white default, blue on hover/active */}
+      <nav className="h-14 px-6 flex items-center gap-2">
         {navigation.map((item) => {
           const Icon = item.icon;
           const isActive = activeTab === item.name;
-          
           return (
             <button
               key={item.name}
               onClick={() => setActiveTab(item.name)}
-              className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all"
+              className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200"
               style={{
-                background: isActive ? '#E2A94B' : 'transparent',
-                color: isActive ? '#0F2A47' : 'rgba(255,255,255,0.7)',
-                boxShadow: isActive ? '0 2px 8px rgba(226, 169, 75, 0.3)' : 'none'
+                background: isActive ? '#1F4FD8' : 'transparent',
+                color: isActive ? '#ffffff' : '#0F172A',
+                border: isActive ? '1px solid #1F4FD8' : '1px solid #e2e8f0'
               }}
               onMouseEnter={(e) => {
                 if (!isActive) {
-                  e.currentTarget.style.background = 'rgba(226, 169, 75, 0.1)';
-                  e.currentTarget.style.color = 'white';
+                  e.currentTarget.style.background = '#1F4FD8';
+                  e.currentTarget.style.color = '#ffffff';
                 }
               }}
               onMouseLeave={(e) => {
                 if (!isActive) {
                   e.currentTarget.style.background = 'transparent';
-                  e.currentTarget.style.color = 'rgba(255,255,255,0.7)';
+                  e.currentTarget.style.color = '#0F172A';
                 }
               }}
             >

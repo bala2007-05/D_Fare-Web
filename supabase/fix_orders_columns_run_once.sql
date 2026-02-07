@@ -1,0 +1,50 @@
+alter table public.orders add column if not exists organization_id uuid;
+alter table public.orders add column if not exists order_id text;
+alter table public.orders add column if not exists customer_name text;
+alter table public.orders add column if not exists customer_phone text;
+alter table public.orders add column if not exists delivery_address text;
+alter table public.orders add column if not exists latitude numeric;
+alter table public.orders add column if not exists longitude numeric;
+alter table public.orders add column if not exists status text default 'pending';
+alter table public.orders add column if not exists time_window_start timestamptz;
+alter table public.orders add column if not exists time_window_end timestamptz;
+alter table public.orders add column if not exists package_weight numeric default 0;
+alter table public.orders add column if not exists volumetric_weight numeric default 0;
+alter table public.orders add column if not exists service_type text default 'standard';
+alter table public.orders add column if not exists skill_requirement text;
+alter table public.orders add column if not exists cod_amount numeric default 0;
+alter table public.orders add column if not exists delivery_cost numeric default 0;
+alter table public.orders add column if not exists driver_payout numeric default 0;
+alter table public.orders add column if not exists hub_id text;
+do $$
+begin
+  if exists (
+    select 1 from information_schema.columns
+    where table_schema = 'public' and table_name = 'orders' and column_name = 'hub_id'
+      and data_type = 'uuid'
+  ) then
+    alter table public.orders alter column hub_id type text using (hub_id::text);
+  end if;
+end $$;
+alter table public.orders add column if not exists assigned_driver text;
+alter table public.orders add column if not exists assigned_route text;
+alter table public.orders add column if not exists priority text default 'normal';
+alter table public.orders add column if not exists attempts int default 0;
+alter table public.orders add column if not exists created_at timestamptz default now();
+alter table public.orders add column if not exists updated_at timestamptz default now();
+
+do $$
+begin
+  if not exists (
+    select 1 from pg_constraint
+    where conrelid = 'public.orders'::regclass
+      and conname = 'orders_order_id_key'
+  ) then
+    alter table public.orders add constraint orders_order_id_key unique (order_id);
+  end if;
+end $$;
+
+create index if not exists idx_orders_order_id on public.orders(order_id);
+create index if not exists idx_orders_assigned_driver on public.orders(assigned_driver);
+create index if not exists idx_orders_status on public.orders(status);
+create index if not exists idx_orders_organization on public.orders(organization_id);

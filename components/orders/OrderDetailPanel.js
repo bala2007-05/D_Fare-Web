@@ -1,15 +1,11 @@
 'use client';
-
 import { X, MapPin, Package, Clock, DollarSign, User, Truck, AlertCircle } from 'lucide-react';
 import Card, { CardHeader, CardContent, CardTitle } from '@/components/ui/Card';
 import { formatDateTime, cn } from '@/lib/utils';
 import { useRole } from '@/lib/roleContext';
-
 export default function OrderDetailPanel({ order, onClose, onOverride }) {
   const { hasPermission } = useRole();
-
   if (!order) return null;
-
   return (
     <div className="fixed inset-y-0 right-0 w-[600px] bg-white shadow-2xl border-l border-slate-200 z-50 overflow-y-auto">
       {/* Header */}
@@ -25,7 +21,6 @@ export default function OrderDetailPanel({ order, onClose, onOverride }) {
           <X className="w-5 h-5 text-slate-600" />
         </button>
       </div>
-
       <div className="p-6 space-y-6">
         {/* Status Overview */}
         <Card>
@@ -41,7 +36,6 @@ export default function OrderDetailPanel({ order, onClose, onOverride }) {
                 {order.status.replace(/_/g, ' ').toUpperCase()}
               </span>
             </div>
-            
             {order.priority === 'urgent' && (
               <div className="flex items-center gap-2 p-3 bg-danger-50 border border-danger-200 rounded-lg">
                 <AlertCircle className="w-4 h-4 text-danger-600" />
@@ -50,7 +44,6 @@ export default function OrderDetailPanel({ order, onClose, onOverride }) {
             )}
           </CardContent>
         </Card>
-
         {/* Customer Information */}
         <Card>
           <CardHeader>
@@ -75,7 +68,6 @@ export default function OrderDetailPanel({ order, onClose, onOverride }) {
             </div>
           </CardContent>
         </Card>
-
         {/* Package Details */}
         <Card>
           <CardHeader>
@@ -106,7 +98,6 @@ export default function OrderDetailPanel({ order, onClose, onOverride }) {
             </div>
           </CardContent>
         </Card>
-
         {/* Delivery Window */}
         <Card>
           <CardHeader>
@@ -127,7 +118,6 @@ export default function OrderDetailPanel({ order, onClose, onOverride }) {
             </div>
           </CardContent>
         </Card>
-
         {/* Assignment */}
         <Card>
           <CardHeader>
@@ -152,7 +142,6 @@ export default function OrderDetailPanel({ order, onClose, onOverride }) {
             </div>
           </CardContent>
         </Card>
-
         {/* Financial Information */}
         {hasPermission('canViewFinancials') && (
           <Card className="border-primary-200 bg-primary-50/30">
@@ -163,25 +152,24 @@ export default function OrderDetailPanel({ order, onClose, onOverride }) {
               <div className="flex items-center justify-between">
                 <span className="text-sm text-slate-600">COD Amount</span>
                 <span className="text-sm font-bold text-slate-900">
-                  ${order.codAmount.toFixed(2)}
+                  ₹{order.codAmount.toFixed(2)}
                 </span>
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-sm text-slate-600">Delivery Cost</span>
                 <span className="text-sm font-semibold text-slate-900">
-                  ${order.deliveryCost.toFixed(2)}
+                  ₹{order.deliveryCost.toFixed(2)}
                 </span>
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-sm text-slate-600">Driver Payout</span>
                 <span className="text-sm font-semibold text-slate-900">
-                  ${order.driverPayout.toFixed(2)}
+                  ₹{order.driverPayout.toFixed(2)}
                 </span>
               </div>
             </CardContent>
           </Card>
         )}
-
         {/* Failure Reason */}
         {order.failureReason && (
           <Card className="border-danger-200 bg-danger-50">
@@ -200,7 +188,6 @@ export default function OrderDetailPanel({ order, onClose, onOverride }) {
             </CardContent>
           </Card>
         )}
-
         {/* Override Action */}
         {hasPermission('canOverride') && order.status !== 'delivered' && (
           <button
@@ -211,7 +198,6 @@ export default function OrderDetailPanel({ order, onClose, onOverride }) {
             Manual Override / Reassign
           </button>
         )}
-
         {/* Timestamps */}
         <div className="pt-4 border-t border-slate-200 text-xs text-slate-500 space-y-1">
           <div>Created: {formatDateTime(order.createdAt)}</div>
@@ -220,4 +206,4 @@ export default function OrderDetailPanel({ order, onClose, onOverride }) {
       </div>
     </div>
   );
-}
+}

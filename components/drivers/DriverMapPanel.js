@@ -1,234 +1,146 @@
 'use client';
-
-import { useEffect, useState } from 'react';
-
-export default function DriverMapPanel({ drivers, selectedDriver }) {
-  const [map, setMap] = useState(null);
-  const [L, setL] = useState(null);
-  const [markers, setMarkers] = useState([]);
-
-  // Dynamically import Leaflet (client-side only)
-  useEffect(() => {
-    const loadLeaflet = async () => {
-      if (typeof window !== 'undefined') {
-        const leaflet = await import('leaflet');
-        await import('leaflet/dist/leaflet.css');
-        
-        // Fix default marker icon issue
-        delete leaflet.Icon.Default.prototype._getIconUrl;
-        leaflet.Icon.Default.mergeOptions({
-          iconRetinaUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon-2x.png',
-          iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png',
-          shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
-        });
-        
-        setL(leaflet);
-      }
-    };
-    
-    loadLeaflet();
-  }, []);
-
-  // Initialize map
-  useEffect(() => {
-    if (!L || map) return;
-
-    const mapInstance = L.map('logistics-map', {
-      center: [40.7505, -73.9934], // New York City center
-      zoom: 12,
-      zoomControl: true,
-    });
-
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-      maxZoom: 19,
-    }).addTo(mapInstance);
-
-    setMap(mapInstance);
-
-    return () => {
-      mapInstance.remove();
-    };
-  }, [L]);
-
-  // Add/update markers
-  useEffect(() => {
-    if (!map || !L || !drivers) return;
-
-    // Clear existing markers
-    markers.forEach(marker => marker.remove());
-
-    // Define color palette for drivers
-    const driverColors = [
-      '#2563eb', // Blue
-      '#ef4444', // Red
-      '#10b981', // Green
-      '#f59e0b', // Amber
-      '#8b5cf6', // Purple
-      '#ec4899', // Pink
-      '#14b8a6', // Teal
-      '#f97316', // Orange
-      '#06b6d4', // Cyan
-      '#84cc16', // Lime
-    ];
-
-    // Create location pin icon
-    const createDriverIcon = (color, isSelected) => {
-      const size = isSelected ? 28 : 20;
-      const borderWidth = isSelected ? 3 : 2;
-      
-      return L.divIcon({
-        className: 'custom-pin-marker',
-        html: `
-          <div style="
-            background: ${color};
-            width: ${size}px;
-            height: ${size}px;
-            border-radius: 50% 50% 50% 0;
-            transform: rotate(-45deg);
-            border: ${borderWidth}px solid white;
-            box-shadow: 0 ${isSelected ? '4px 10px' : '2px 6px'} rgba(0,0,0,${isSelected ? '0.4' : '0.3'});
-            position: relative;
-            transition: all 0.3s ease;
-            ${isSelected ? 'animation: pinPulse 1.5s infinite;' : ''}
-          ">
-            <div style="
-              position: absolute;
-              top: 50%;
-              left: 50%;
-              transform: translate(-50%, -50%) rotate(45deg);
-              width: ${size * 0.35}px;
-              height: ${size * 0.35}px;
-              background: white;
-              border-radius: 50%;
-            "></div>
-          </div>
-        `,
-        iconSize: [size, size],
-        iconAnchor: [size / 2, size],
-        popupAnchor: [0, -size]
-      });
-    };
-
-    // Add markers for all drivers
-    const newMarkers = drivers.map((driver, index) => {
-      const isSelected = selectedDriver?.driverId === driver.driverId;
-      const color = driverColors[index % driverColors.length];
-      
-      const marker = L.marker(
-        [driver.liveLocation.lat, driver.liveLocation.lng],
-        { icon: createDriverIcon(color, isSelected) }
-      ).addTo(map);
-
-      marker.bindPopup(`
-        <div style="font-family: sans-serif; min-width: 220px;">
-          <div style="font-weight: bold; font-size: 15px; color: #1e293b; margin-bottom: 6px;">
-            ${driver.name}
-          </div>
-          <div style="font-size: 11px; color: #64748b; font-family: monospace; margin-bottom: 10px;">
-            ${driver.driverId}
-          </div>
-          <div style="display: inline-block; padding: 5px 10px; background: ${
-            driver.status === 'busy' ? '#dbeafe' : 
-            driver.status === 'idle' ? '#dcfce7' : 
-            '#f1f5f9'
-          }; color: ${
-            driver.status === 'busy' ? '#1e40af' : 
-            driver.status === 'idle' ? '#166534' : 
-            '#475569'
-          }; border-radius: 8px; font-size: 11px; font-weight: 600; text-transform: uppercase;">
-            ${driver.status.replace(/_/g, ' ')}
-          </div>
-          <div style="margin-top: 10px; padding-top: 10px; border-top: 1px solid #e2e8f0;">
-            <div style="font-size: 11px; color: #64748b; margin-bottom: 4px;">
-              <strong>Location:</strong> ${driver.liveLocation.lat.toFixed(4)}, ${driver.liveLocation.lng.toFixed(4)}
-            </div>
-            <div style="font-size: 11px; color: #64748b; margin-bottom: 4px;">
-              <strong>Vehicle:</strong> ${driver.vehicleId}
-            </div>
-            <div style="font-size: 11px; color: #64748b;">
-              <strong>Tasks:</strong> ${driver.tasksToday} today
-            </div>
-          </div>
-        </div>
-      `, {
-        maxWidth: 250,
-        closeButton: true
-      });
-
-      // Auto-open popup for selected driver
-      if (isSelected) {
-        marker.openPopup();
-      }
-
-      return marker;
-    });
-
-    setMarkers(newMarkers);
-
-    // If a driver is selected, zoom to their location
-    if (selectedDriver) {
-      map.flyTo(
-        [selectedDriver.liveLocation.lat, selectedDriver.liveLocation.lng],
-        15,
-        {
-          duration: 1.5,
-          easeLinearity: 0.5
-        }
-      );
-    } else {
-      // Fit all markers in view
-      if (newMarkers.length > 0) {
-        const group = L.featureGroup(newMarkers);
-        map.fitBounds(group.getBounds().pad(0.1));
-      }
-    }
-  }, [map, L, drivers, selectedDriver]);
-
-  return (
-    <>
-      <div 
-        id="logistics-map" 
-        style={{ 
-          width: '100%',
-          height: '100%',
-          borderRadius: '0',
-          zIndex: 1
-        }}
-      />
-      <style jsx global>{`
-        .custom-pin-marker {
-          background: none !important;
-          border: none !important;
-        }
-        
-        .leaflet-popup-content-wrapper {
-          border-radius: 14px;
-          box-shadow: 0 12px 30px rgba(0,0,0,0.25);
-        }
-        
-        .leaflet-popup-content {
-          margin: 14px 18px;
-          line-height: 1.6;
-        }
-        
-        .leaflet-popup-tip {
-          box-shadow: 0 3px 10px rgba(0,0,0,0.15);
-        }
-        
-        @keyframes pinPulse {
-          0%, 100% {
-            transform: rotate(-45deg) scale(1);
-          }
-          50% {
-            transform: rotate(-45deg) scale(1.15);
-          }
-        }
-
-        #logistics-map {
-          background: #f8fafc;
-        }
-      `}</style>
-    </>
-  );
+import { useEffect, useRef, useState } from 'react';
+const COIMBATORE = [76.9558, 11.0168];
+const OSM_STYLE = {
+  version: 8,
+  sources: {
+    osm: {
+      type: 'raster',
+      tiles: ['https://tile.openstreetmap.org/{z}/{x}/{y}.png'],
+      tileSize: 256,
+      attribution: '© OpenStreetMap contributors',
+    },
+  },
+  layers: [{ id: 'osm', type: 'raster', source: 'osm' }],
+};
+function createMarkerEl(driver, isSelected) {
+  const el = document.createElement('div');
+  el.className = 'driver-marker';
+  el.setAttribute('data-driver-id', driver.id);
+  const isOnline = driver.active === true;
+  const size = isSelected ? 20 : 14;
+  el.style.cssText = `
+    width: ${size}px; height: ${size}px; border-radius: 50%;
+    background: ${isSelected ? '#1F4FD8' : isOnline ? '#16a34a' : '#94a3b8'};
+    border: 2px solid #fff; box-shadow: 0 1px 4px rgba(0,0,0,0.3);
+    cursor: pointer; transition: transform 0.15s ease;
+  `;
+  el.title = `${driver.name}${isOnline ? ' (Online)' : ''}`;
+  el.addEventListener('mouseenter', () => { el.style.transform = 'scale(1.15)'; });
+  el.addEventListener('mouseleave', () => { el.style.transform = 'scale(1)'; });
+  return el;
 }
+export default function DriverMapPanel({
+  drivers = [],
+  selectedDriverId,
+  onSelectDriver,
+  onLocationDenied,
+  driversOnlineOnly = false,
+}) {
+  const containerRef = useRef(null);
+  const mapRef = useRef(null);
+  const maplibreRef = useRef(null);
+  const markersRef = useRef([]);
+  const [mapReady, setMapReady] = useState(false);
+  const driversToShow = driversOnlineOnly
+    ? drivers.filter((d) => d.active === true)
+    : drivers;
+  const driversWithCoords = driversToShow.filter((d) => d.lat != null && d.lng != null);
+  useEffect(() => {
+    if (typeof window === 'undefined' || !containerRef.current) return;
+    let cancelled = false;
+    Promise.all([
+      import('maplibre-gl/dist/maplibre-gl.css'),
+      import('maplibre-gl'),
+    ]).then(([, maplibreModule]) => {
+      if (cancelled || !containerRef.current) return;
+      const maplibre = maplibreModule.default;
+      maplibreRef.current = maplibre;
+      const mapInstance = new maplibre.Map({
+        container: containerRef.current,
+        style: OSM_STYLE,
+        center: COIMBATORE,
+        zoom: 11,
+      });
+      mapInstance.addControl(new maplibre.NavigationControl(), 'top-right');
+      mapRef.current = mapInstance;
+      mapInstance.on('load', () => {
+        if (!cancelled) setMapReady(true);
+      });
+      if (navigator.geolocation && typeof onLocationDenied === 'function') {
+        navigator.geolocation.getCurrentPosition(
+          (pos) => {
+            if (!cancelled && mapRef.current) {
+              mapRef.current.setCenter([pos.coords.longitude, pos.coords.latitude]);
+              mapRef.current.setZoom(13);
+            }
+          },
+          () => onLocationDenied()
+        );
+      }
+    });
+    return () => {
+      cancelled = true;
+      markersRef.current = [];
+      maplibreRef.current = null;
+      if (mapRef.current) {
+        try { mapRef.current.remove(); } catch (_) {}
+        mapRef.current = null;
+      }
+      setMapReady(false);
+    };
+  }, [onLocationDenied]);
+  useEffect(() => {
+    if (!mapReady || !mapRef.current || !maplibreRef.current) return;
+    const map = mapRef.current;
+    const maplibre = maplibreRef.current;
+    markersRef.current.forEach((m) => {
+      try { m.remove(); } catch (_) {}
+    });
+    markersRef.current = [];
+    driversWithCoords.forEach((driver) => {
+      const isSelected = selectedDriverId === driver.id;
+      const el = createMarkerEl(driver, isSelected);
+      const marker = new maplibre.Marker({ element: el })
+        .setLngLat([driver.lng, driver.lat])
+        .addTo(map);
+      el.addEventListener('click', () => {
+        if (typeof onSelectDriver === 'function') onSelectDriver(driver);
+      });
+      const popup = new maplibre.Popup({ offset: 15, closeButton: false })
+        .setHTML(
+          `<div style="padding:4px 0;min-width:120px;">
+            <strong style="color:#0f172a">${driver.name}</strong>
+            ${driver.active ? '<span style="color:#16a34a;font-size:11px;margin-left:6px">● Online</span>' : ''}
+            <div style="font-size:11px;color:#64748b;margin-top:2px">${driver.routeName}</div>
+          </div>`
+        );
+      marker.setPopup(popup);
+      markersRef.current.push(marker);
+    });
+    if (driversWithCoords.length > 1) {
+      const lngs = driversWithCoords.map((d) => d.lng);
+      const lats = driversWithCoords.map((d) => d.lat);
+      const bounds = [
+        [Math.min(...lngs), Math.min(...lats)],
+        [Math.max(...lngs), Math.max(...lats)],
+      ];
+      try {
+        map.fitBounds(bounds, { padding: 50, maxZoom: 14, duration: 500 });
+      } catch (_) {}
+    }
+  }, [mapReady, driversWithCoords, selectedDriverId, onSelectDriver]);
+  useEffect(() => {
+    if (!mapRef.current || !selectedDriverId) return;
+    const driver = driversWithCoords.find((d) => d.id === selectedDriverId);
+    if (!driver) return;
+    try {
+      mapRef.current.flyTo({ center: [driver.lng, driver.lat], zoom: 15, duration: 800 });
+    } catch (_) {}
+  }, [selectedDriverId, driversWithCoords]);
+  return (
+    <div className="relative w-full h-full" style={{ minHeight: 300 }}>
+      <div ref={containerRef} className="absolute inset-0 w-full h-full" />
+    </div>
+  );
+}

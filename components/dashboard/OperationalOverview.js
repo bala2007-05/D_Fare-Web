@@ -1,9 +1,7 @@
 'use client';
-
 import { Users, ClipboardList, CheckCircle2, AlertCircle, Activity } from 'lucide-react';
 import MetricCard from './MetricCard';
 import { operationalMetrics } from '@/lib/mockData';
-
 export default function OperationalOverview() {
   const metrics = [
     {
@@ -42,7 +40,6 @@ export default function OperationalOverview() {
       subtitle: `${operationalMetrics.successRate}% success rate`,
     },
   ];
-
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
       {metrics.map((metric, index) => (
@@ -50,4 +47,4 @@ export default function OperationalOverview() {
       ))}
     </div>
   );
-}
+}

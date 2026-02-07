@@ -1,5 +1,4 @@
 'use client';
-
 import { useState, useMemo } from 'react';
 import { ArrowRight, Clock } from 'lucide-react';
 import Card, { CardHeader, CardContent, CardTitle } from '@/components/ui/Card';
@@ -7,37 +6,30 @@ import Badge from '@/components/ui/Badge';
 import EmptyState from '@/components/ui/EmptyState';
 import { tasks } from '@/lib/mockData';
 import { formatDateTime, formatRelativeTime, formatStatus, getPriorityColor, cn } from '@/lib/utils';
-
 const tabs = [
   { id: 'pending', label: 'Pending', state: 'pending' },
   { id: 'active', label: 'Active', state: 'in_progress' },
   { id: 'completed', label: 'Completed', state: 'completed' },
 ];
-
 export default function TaskQueue() {
   const [activeTab, setActiveTab] = useState('active');
-
   const filteredTasks = useMemo(() => {
     const currentTab = tabs.find(t => t.id === activeTab);
     return tasks.filter(task => task.state === currentTab.state);
   }, [activeTab]);
-
   const getTabCount = (tabId) => {
     const tab = tabs.find(t => t.id === tabId);
     return tasks.filter(task => task.state === tab.state).length;
   };
-
   return (
     <Card>
       <CardHeader className="pb-0">
         <CardTitle>Task Queue Monitoring</CardTitle>
-        
         {/* Tabs */}
         <div className="flex items-center gap-2 mt-4 border-b border-slate-200">
           {tabs.map((tab) => {
             const isActive = activeTab === tab.id;
             const count = getTabCount(tab.id);
-            
             return (
               <button
                 key={tab.id}
@@ -63,7 +55,6 @@ export default function TaskQueue() {
           })}
         </div>
       </CardHeader>
-
       <CardContent className="p-0">
         {filteredTasks.length === 0 ? (
           <EmptyState
@@ -173,4 +164,4 @@ export default function TaskQueue() {
       </CardContent>
     </Card>
   );
-}
+}

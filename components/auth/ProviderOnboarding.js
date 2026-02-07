@@ -1,9 +1,7 @@
 'use client';
-
 import { useState } from 'react';
 import { Building2, MapPin, Upload, FileText, Check, ArrowRight } from 'lucide-react';
 import Card, { CardHeader, CardContent, CardTitle } from '@/components/ui/Card';
-
 export default function ProviderOnboarding({ onComplete }) {
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState({
@@ -19,23 +17,19 @@ export default function ProviderOnboarding({ onComplete }) {
     insurance: null,
     kycProof: null,
   });
-
   const steps = [
     { id: 1, name: 'Organization Info', icon: Building2 },
     { id: 2, name: 'Operations Setup', icon: MapPin },
     { id: 3, name: 'Documents', icon: FileText },
   ];
-
   const handleNext = () => {
     if (step < 3) {
-      // Validate current step
       if (step === 1 && (!formData.name || !formData.businessId)) {
         alert('Please fill in required fields');
         return;
       }
       setStep(step + 1);
     } else {
-      // Complete onboarding
       const orgData = {
         name: formData.name,
         type: formData.type,
@@ -51,11 +45,9 @@ export default function ProviderOnboarding({ onComplete }) {
       onComplete && onComplete(orgData);
     }
   };
-
   const handleBack = () => {
     if (step > 1) setStep(step - 1);
   };
-
   return (
     <div className="min-h-screen bg-slate-50 py-12 px-4">
       <div className="max-w-3xl mx-auto">
@@ -66,7 +58,6 @@ export default function ProviderOnboarding({ onComplete }) {
               const Icon = s.icon;
               const isActive = step === s.id;
               const isCompleted = step > s.id;
-              
               return (
                 <div key={s.id} className="flex items-center flex-1">
                   <div className="flex flex-col items-center flex-1">
@@ -93,7 +84,6 @@ export default function ProviderOnboarding({ onComplete }) {
             })}
           </div>
         </div>
-
         <Card>
           <CardHeader>
             <CardTitle>Organization Registration - Step {step} of 3</CardTitle>
@@ -101,7 +91,6 @@ export default function ProviderOnboarding({ onComplete }) {
               Register your organization to start using D-FARE
             </p>
           </CardHeader>
-
           <CardContent className="space-y-6">
             {/* Step 1: Organization Details */}
             {step === 1 && (
@@ -172,7 +161,6 @@ export default function ProviderOnboarding({ onComplete }) {
                 </div>
               </>
             )}
-
             {/* Step 2: Operations & Hubs */}
             {step === 2 && (
               <>
@@ -229,7 +217,6 @@ export default function ProviderOnboarding({ onComplete }) {
                 </div>
               </>
             )}
-
             {/* Step 3: Documents */}
             {step === 3 && (
               <>
@@ -252,7 +239,6 @@ export default function ProviderOnboarding({ onComplete }) {
                 </div>
               </>
             )}
-
             {/* Navigation Buttons */}
             <div className="flex items-center justify-between pt-6 border-t border-slate-200">
               <button
@@ -275,4 +261,4 @@ export default function ProviderOnboarding({ onComplete }) {
       </div>
     </div>
   );
-}
+}

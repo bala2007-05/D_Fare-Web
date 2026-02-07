@@ -1,5 +1,4 @@
 'use client';
-
 import { useState } from 'react';
 import { Search, RefreshCw } from 'lucide-react';
 import Badge from '@/components/ui/Badge';
@@ -7,22 +6,17 @@ import Input from '@/components/ui/Input';
 import Select from '@/components/ui/Select';
 import { driversEnhanced, DRIVER_STATUS } from '@/lib/enterpriseMockData';
 import { formatRelativeTime } from '@/lib/utils';
-
 export default function DriverListPanel({ onDriverSelect, selectedDriver }) {
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
   const [lastRefresh, setLastRefresh] = useState(new Date());
-
   const filteredDrivers = driversEnhanced.filter((driver) => {
     const matchesSearch = 
       driver.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       driver.driverId.toLowerCase().includes(searchQuery.toLowerCase());
-    
     const matchesStatus = statusFilter === 'all' || driver.status === statusFilter;
-    
     return matchesSearch && matchesStatus;
   });
-
   return (
     <div className="driver-panel" style={{
       width: '30%',
@@ -40,7 +34,7 @@ export default function DriverListPanel({ onDriverSelect, selectedDriver }) {
       }}>
         <div className="flex items-center justify-between mb-4">
           <div>
-            <h2 className="text-lg font-bold text-slate-900">Live Drivers</h2>
+            <h2 className="text-lg font-bold text-slate-900">Drivers</h2>
             <p className="text-xs text-slate-500 mt-1">
               {filteredDrivers.length} active drivers
             </p>
@@ -53,7 +47,6 @@ export default function DriverListPanel({ onDriverSelect, selectedDriver }) {
             <RefreshCw className="w-4 h-4 text-slate-600" />
           </button>
         </div>
-        
         {/* Search */}
         <div className="relative mb-3">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
@@ -65,7 +58,6 @@ export default function DriverListPanel({ onDriverSelect, selectedDriver }) {
             className="pl-9 text-sm"
           />
         </div>
-        
         {/* Filter */}
         <Select
           value={statusFilter}
@@ -79,7 +71,6 @@ export default function DriverListPanel({ onDriverSelect, selectedDriver }) {
           <option value={DRIVER_STATUS.OFFLINE}>Offline</option>
         </Select>
       </div>
-
       {/* Driver Cards */}
       <div style={{ flex: 1, overflowY: 'auto', padding: '10px' }}>
         {filteredDrivers.map((driver) => (
@@ -118,7 +109,6 @@ export default function DriverListPanel({ onDriverSelect, selectedDriver }) {
               }}>
                 {driver.name.split(' ').map(n => n[0]).join('')}
               </div>
-              
               {/* Driver Info */}
               <div style={{ flex: 1, minWidth: 0 }}>
                 <div className="text-sm font-semibold text-slate-900 truncate">
@@ -139,4 +129,4 @@ export default function DriverListPanel({ onDriverSelect, selectedDriver }) {
       </div>
     </div>
   );
-}
+}

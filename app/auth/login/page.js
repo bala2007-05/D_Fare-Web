@@ -1,235 +1,172 @@
 'use client';
-
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { motion } from 'framer-motion';
-import { Mail, Lock, CheckCircle } from 'lucide-react';
 import { useProvider } from '@/lib/providerContext';
 import { useRole, ROLES } from '@/lib/roleContext';
-import LogisticsBackground from '@/components/auth/LogisticsBackground';
-import ProfessionalLoadingText from '@/components/auth/ProfessionalLoadingText';
-import RegistrationModal from '@/components/auth/RegistrationModal';
-
+import RegistrationModalWrapper from '@/components/organization/RegistrationModalWrapper';
+import { useAuthActions } from '@/lib/auth/useAuth';
+import { supabase } from '@/lib/supabase/client';
 export default function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
-  const [showRegistration, setShowRegistration] = useState(false);
+  const [showRegistrationModal, setShowRegistrationModal] = useState(false);
   const { login } = useProvider();
   const { setCurrentRole } = useRole();
+  const { signIn } = useAuthActions();
   const router = useRouter();
-
   const handleLogin = async (e) => {
     e.preventDefault();
     setError('');
-
     if (!email || !password) {
       setError('Please enter both email and password');
       return;
     }
-
     setIsLoading(true);
-
-    setTimeout(() => {
-      try {
+    try {
+      if (supabase) {
+        await signIn(email.trim(), password);
+      } else {
         login(email, password);
-        setCurrentRole(ROLES.ADMIN);
-        setIsSuccess(true);
-
-        setTimeout(() => {
-          router.push('/dashboard');
-        }, 1500);
-      } catch (err) {
-        setError('Invalid credentials');
-        setIsLoading(false);
       }
-    }, 1500);
+      setCurrentRole(ROLES.ADMIN);
+      setIsSuccess(true);
+      setTimeout(() => router.push('/dashboard'), 800);
+    } catch (err) {
+      setError(err?.message || 'Invalid credentials');
+      setIsLoading(false);
+    }
   };
-
-  const handleRegistrationComplete = () => {
-    setShowRegistration(false);
-    setError('');
-    setTimeout(() => {
-      alert('Registration successful! Please sign in with your credentials.');
-    }, 300);
-  };
-
   return (
-    <div className="login-page">
-      {/* Loading overlay */}
-      {isLoading && !isSuccess && (
-        <motion.div
-          className="absolute inset-0 bg-slate-950/40 backdrop-blur-sm z-10 flex items-center justify-center"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
+    <div className="auth-page">
+      {/* Left: illustration */}
+      <div className="auth-left">
+        <img
+          src="/images/login.png"
+          alt=""
         />
-      )}
-
-      {/* Main Content */}
-      <motion.div
-        className="relative z-20 w-full max-w-md px-4"
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ 
-          opacity: isSuccess ? 0 : 1, 
-          y: isSuccess ? -20 : 0,
-          scale: isSuccess ? 0.95 : 1
-        }}
-        transition={{ duration: 0.5 }}
-      >
-        {/* Logo */}
-        <motion.div
-          className="text-center mb-8"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.2 }}
-        >
-          <img 
-            src="https://i.ibb.co/pBj9bMp4/logo-removebg-preview.png"
-            alt="D-FARE Logo" 
-            className="login-logo mx-auto mb-3"
-          />
-          <p className="login-subtitle text-sm">Fair Dispatch Management System</p>
-        </motion.div>
-
-        {/* Login Card */}
-        <motion.div
-          className="login-card"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3, type: 'spring' }}
-        >
-          <div className="mb-6">
-            <h2 className="text-lg font-semibold">Sign In</h2>
-            <p className="text-sm mt-1" style={{ color: 'rgba(255,255,255,0.7)' }}>Access your dispatch operations</p>
+      </div>
+      {/* Right: login form */}
+      <div className="auth-right">
+        <div className="login-card">
+          <div className="mb-2 flex justify-center flex-shrink-0">
+            <img
+              src="/images/logo.png"
+              alt="D-FARE"
+              className="login-logo"
+            />
           </div>
-
-          <form onSubmit={handleLogin} className="space-y-4">
-            {/* Email */}
+          <h1 className="text-lg font-bold tracking-tight flex-shrink-0" style={{ color: '#0F172A' }}>
+            Login to D-FARE
+          </h1>
+          <form onSubmit={handleLogin} className="space-y-2" style={{ marginBottom: 0 }}>
             <div>
-              <label className="block text-sm font-medium mb-2">
-                Email Address
+              <label htmlFor="email" className="mb-1 block text-sm font-medium" style={{ color: '#0F172A' }}>
+                Email
               </label>
-              <div className="relative">
-                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5" style={{ color: '#E2A94B' }} />
-                <input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2.5 rounded-lg transition-all"
-                  placeholder="you@company.com"
-                  disabled={isLoading || isSuccess}
-                  required
-                />
-              </div>
+              <input
+                id="email"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="you@company.com"
+                disabled={isLoading || isSuccess}
+                required
+                className="login-input w-full rounded-lg border px-4 py-2 text-sm disabled:opacity-60 focus:outline-none focus:ring-2 focus:ring-[#1F4FD8] transition-all duration-200"
+              />
             </div>
-
-            {/* Password */}
             <div>
-              <label className="block text-sm font-medium mb-2">
+              <label htmlFor="password" className="mb-1 block text-sm font-medium" style={{ color: '#0F172A' }}>
                 Password
               </label>
-              <div className="relative">
-                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5" style={{ color: '#E2A94B' }} />
-                <input
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2.5 rounded-lg transition-all"
-                  placeholder="••••••••"
-                  disabled={isLoading || isSuccess}
-                  required
-                />
-              </div>
+              <input
+                id="password"
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="••••••••"
+                disabled={isLoading || isSuccess}
+                required
+                className="login-input w-full rounded-lg border px-4 py-2 text-sm disabled:opacity-60 focus:outline-none focus:ring-2 focus:ring-[#1F4FD8] transition-all duration-200"
+              />
             </div>
-
-            {/* Error */}
             {error && (
-              <motion.div
-                initial={{ opacity: 0, height: 0 }}
-                animate={{ opacity: 1, height: 'auto' }}
-                className="p-3 bg-red-500/10 border border-red-500/20 rounded-lg"
-              >
-                <p className="text-sm text-red-400">{error}</p>
-              </motion.div>
+              <p className="rounded-lg bg-red-50 px-3 py-2 text-sm font-medium text-red-600 border border-red-200">{error}</p>
             )}
-
-            {/* Submit Button */}
-            <motion.button
+            <button
               type="submit"
               disabled={isLoading || isSuccess}
-              className="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
-              whileHover={!isLoading && !isSuccess ? { y: -1 } : {}}
-              whileTap={!isLoading && !isSuccess ? { scale: 0.98 } : {}}
+              className="login-submit-btn w-full rounded-full py-2 font-semibold text-white transition-all duration-200 disabled:cursor-not-allowed disabled:opacity-60"
+              style={{ background: '#1F4FD8' }}
             >
               {isLoading && !isSuccess ? (
-                <>
-                  <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                  <span>Signing In</span>
-                </>
+                <span className="flex items-center justify-center gap-2">
+                  <span className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
+                  Signing in…
+                </span>
               ) : isSuccess ? (
-                <>
-                  <CheckCircle className="w-5 h-5" />
-                  <span>Success</span>
-                </>
+                'Success'
               ) : (
-                'Sign In'
+                'Login'
               )}
-            </motion.button>
-          </form>
-
-          {/* Loading State */}
-          {isLoading && !isSuccess && (
-            <motion.div
-              className="mt-4 pt-4 border-t border-slate-700/50"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-            >
-              <ProfessionalLoadingText />
-            </motion.div>
-          )}
-
-          {/* Demo Credentials */}
-          <div className="mt-6 p-4 rounded-lg" style={{ background: 'rgba(12, 34, 57, 0.5)', border: '1px solid rgba(226, 169, 75, 0.2)' }}>
-            <p className="text-xs font-medium mb-2" style={{ color: '#E2A94B' }}>Demo Credentials</p>
-            <div className="text-xs space-y-1 font-mono" style={{ color: 'rgba(255,255,255,0.6)' }}>
-              <p>demo@organization.com</p>
-              <p>demo123</p>
-            </div>
-          </div>
-
-          {/* Registration Link */}
-          <div className="mt-6 text-center text-sm">
-            <span style={{ color: 'rgba(255,255,255,0.7)' }}>New organization? </span>
-            <button
-              onClick={() => setShowRegistration(true)}
-              className="register-link transition-colors"
-              disabled={isLoading}
-            >
-              Register here
             </button>
-          </div>
-        </motion.div>
-
-        {/* Footer */}
-        <motion.div
-          className="mt-6 text-center text-xs"
-          style={{ color: 'rgba(255,255,255,0.6)' }}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.5 }}
-        >
-          <p>© 2026 D-FARE Systems. Enterprise Edition.</p>
-          <p className="mt-1">Secure authentication • Data isolation • GDPR compliant</p>
-        </motion.div>
-      </motion.div>
-
-      {/* Registration Modal */}
-      <RegistrationModal
-        isOpen={showRegistration}
-        onClose={() => setShowRegistration(false)}
-        onComplete={handleRegistrationComplete}
+            <div className="relative py-1.5">
+              <div className="absolute inset-0 flex items-center">
+                <div className="w-full border-t" style={{ borderColor: '#DBEAFE' }} />
+              </div>
+              <div className="relative flex justify-center">
+                <span className="bg-white px-3 text-xs font-medium uppercase tracking-wide" style={{ color: '#64748b' }}>
+                  OR
+                </span>
+              </div>
+            </div>
+            <button
+              type="button"
+              className="flex w-full items-center justify-start gap-3 rounded-xl border bg-white px-4 py-2 font-medium shadow-sm transition hover:bg-slate-50"
+              style={{ borderColor: '#DBEAFE', color: '#0F172A' }}
+            >
+              <span className="flex h-5 w-5 shrink-0 items-center justify-center">
+                <svg className="h-5 w-5" viewBox="0 0 24 24" aria-hidden>
+                  <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
+                  <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
+                  <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" />
+                  <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" />
+                </svg>
+              </span>
+              <span>Sign in with Google</span>
+            </button>
+            <button
+              type="button"
+              className="flex w-full items-center justify-start gap-3 rounded-xl border bg-white px-4 py-2 font-medium shadow-sm transition hover:bg-slate-50"
+              style={{ borderColor: '#DBEAFE', color: '#0F172A' }}
+            >
+              <span className="flex h-5 w-5 shrink-0 items-center justify-center">
+                <svg className="h-5 w-5" viewBox="0 0 23 23" aria-hidden>
+                  <path fill="#F25022" d="M1 1h10v10H1z" />
+                  <path fill="#00A4EF" d="M12 1h10v10H12z" />
+                  <path fill="#7FBA00" d="M1 12h10v10H1z" />
+                  <path fill="#FFB900" d="M12 12h10v10H12z" />
+                </svg>
+              </span>
+              <span>Sign in with Microsoft</span>
+            </button>
+            <p className="pt-1 text-center flex-shrink-0">
+              <button
+                type="button"
+                onClick={() => setShowRegistrationModal(true)}
+                className="text-sm font-semibold !bg-transparent hover:!bg-transparent border-0 cursor-pointer p-0 !text-slate-700 hover:!text-slate-700 no-underline hover:no-underline"
+              >
+                Register your organization
+              </button>
+            </p>
+          </form>
+        </div>
+      </div>
+      <RegistrationModalWrapper
+        isOpen={showRegistrationModal}
+        onClose={() => setShowRegistrationModal(false)}
       />
     </div>
   );

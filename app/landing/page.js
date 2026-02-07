@@ -1,24 +1,19 @@
 'use client';
-
 import { motion } from 'framer-motion';
 import { Play, Truck, Scale, MapPin, TrendingUp, Bell, Brain, Zap, Users, Shield } from 'lucide-react';
-
 export default function LandingPage() {
   const features = [
     { icon: Truck, text: 'Real-Time Dispatch' },
     { icon: Scale, text: 'Fair Driver Allocation' },
-    { icon: MapPin, text: 'Smart Route AI' },
+    { icon: MapPin, text: 'Smart Route Engine' },
     { icon: TrendingUp, text: 'Demand Prediction' },
     { icon: Bell, text: 'Instant Alerts' },
-    { icon: Brain, text: 'AI Optimization' },
+    { icon: Brain, text: 'Dynamic Optimization' },
     { icon: Zap, text: 'Lightning Fast' },
     { icon: Users, text: 'Driver Fairness' },
     { icon: Shield, text: 'Secure Platform' },
   ];
-
-  // Duplicate for seamless loop
   const scrollingFeatures = [...features, ...features];
-
   return (
     <div className="min-h-screen bg-[#0B1C2D] relative overflow-hidden font-['Inter']">
       {/* Animated Background Gradient Lines */}
@@ -68,7 +63,6 @@ export default function LandingPage() {
           }}
         />
       </div>
-
       {/* Hero Section */}
       <div className="relative z-10 max-w-7xl mx-auto px-6 py-20 md:py-32">
         <div className="grid md:grid-cols-2 gap-12 items-center">
@@ -90,7 +84,6 @@ export default function LandingPage() {
               </div>
               <span className="text-[#F5C76B] font-semibold text-sm">D-FARE System</span>
             </motion.div>
-
             {/* Main Heading */}
             <motion.h1
               className="text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-6 leading-tight"
@@ -98,13 +91,8 @@ export default function LandingPage() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.3 }}
             >
-              AI-Powered{' '}
-              <span className="bg-gradient-to-r from-[#F5C76B] to-[#D4A017] bg-clip-text text-transparent">
-                Fair Dispatch
-              </span>{' '}
-              for Smart Logistics
+              Fair Dispatch System for Smarter Deliveries
             </motion.h1>
-
             {/* Subtext */}
             <motion.p
               className="text-xl text-gray-300 mb-8 leading-relaxed"
@@ -112,10 +100,9 @@ export default function LandingPage() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.4 }}
             >
-              Optimizing delivery fairness, speed, and intelligence using real-time AI decisions.
-              Transform your logistics operations with intelligent automation.
+              Balancing workload, reducing delays and providing efficient delivery routes in real
+              time.
             </motion.p>
-
             {/* Buttons */}
             <motion.div
               className="flex flex-wrap gap-4"
@@ -139,7 +126,6 @@ export default function LandingPage() {
                 Watch Demo
               </motion.button>
             </motion.div>
-
             {/* Stats */}
             <motion.div
               className="grid grid-cols-3 gap-6 mt-12 pt-8 border-t border-white/10"
@@ -161,7 +147,6 @@ export default function LandingPage() {
               </div>
             </motion.div>
           </motion.div>
-
           {/* Right Side - Illustration */}
           <motion.div
             className="relative"
@@ -199,7 +184,6 @@ export default function LandingPage() {
                   >
                     <Brain className="w-12 h-12 text-[#0B1C2D]" />
                   </motion.div>
-
                   {/* Orbiting Trucks */}
                   {[0, 1, 2, 3].map((i) => (
                     <motion.div
@@ -232,7 +216,6 @@ export default function LandingPage() {
                       </motion.div>
                     </motion.div>
                   ))}
-
                   {/* Connecting Lines */}
                   <svg className="absolute inset-0 w-full h-full">
                     <defs>
@@ -260,7 +243,6 @@ export default function LandingPage() {
                       }}
                     />
                   </svg>
-
                   {/* Floating Data Points */}
                   {[0, 1, 2, 3, 4].map((i) => (
                     <motion.div
@@ -283,7 +265,6 @@ export default function LandingPage() {
                   ))}
                 </div>
               </motion.div>
-
               {/* Floating Feature Cards */}
               <motion.div
                 className="absolute -top-8 -right-8 bg-white/10 backdrop-blur-xl border border-[#D4A017]/30 rounded-2xl p-4 shadow-xl"
@@ -302,7 +283,6 @@ export default function LandingPage() {
                   </div>
                 </div>
               </motion.div>
-
               <motion.div
                 className="absolute -bottom-8 -left-8 bg-white/10 backdrop-blur-xl border border-[#D4A017]/30 rounded-2xl p-4 shadow-xl"
                 initial={{ opacity: 0, scale: 0 }}
@@ -324,7 +304,6 @@ export default function LandingPage() {
           </motion.div>
         </div>
       </div>
-
       {/* Moving Bottom Strip */}
       <div className="fixed bottom-0 left-0 right-0 bg-[#0F2438] border-t border-[#D4A017]/20 py-4 overflow-hidden z-50">
         <motion.div
@@ -356,4 +335,4 @@ export default function LandingPage() {
       </div>
     </div>
   );
-}
+}

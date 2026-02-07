@@ -1,11 +1,9 @@
 'use client';
-
 import { MapPin, Navigation, Clock, TrendingUp, Circle } from 'lucide-react';
 import Card, { CardHeader, CardContent, CardTitle } from '@/components/ui/Card';
 import Badge from '@/components/ui/Badge';
 import { routes } from '@/lib/enterpriseMockData';
 import { formatRelativeTime, cn } from '@/lib/utils';
-
 export default function RouteMonitoring() {
   const getGeofenceColor = (status) => {
     const colors = {
@@ -15,14 +13,12 @@ export default function RouteMonitoring() {
     };
     return colors[status] || 'bg-slate-100 text-slate-600';
   };
-
   return (
     <div className="space-y-6">
       <div>
         <h2 className="text-xl font-bold text-slate-900">Active Routes</h2>
         <p className="text-sm text-slate-600 mt-1">{routes.length} routes in progress</p>
       </div>
-
       <div className="space-y-4">
         {routes.map((route) => (
           <Card key={route.routeId}>
@@ -37,7 +33,6 @@ export default function RouteMonitoring() {
                 </Badge>
               </div>
             </CardHeader>
-
             <CardContent className="space-y-4">
               {/* Route Progress */}
               <div>
@@ -54,7 +49,6 @@ export default function RouteMonitoring() {
                   />
                 </div>
               </div>
-
               {/* Stop Progress */}
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 <div>
@@ -85,7 +79,6 @@ export default function RouteMonitoring() {
                   </span>
                 </div>
               </div>
-
               {/* Stop Sequence */}
               <div>
                 <div className="text-sm font-semibold text-slate-700 mb-3">Stop Sequence</div>
@@ -131,7 +124,6 @@ export default function RouteMonitoring() {
                   ))}
                 </div>
               </div>
-
               {/* Map Placeholder */}
               <div className="h-48 bg-slate-100 rounded-lg flex items-center justify-center border-2 border-dashed border-slate-300">
                 <div className="text-center">
@@ -146,4 +138,4 @@ export default function RouteMonitoring() {
       </div>
     </div>
   );
-}
+}

@@ -1,5 +1,4 @@
 import { cn } from '@/lib/utils';
-
 export default function EmptyState({ 
   icon: Icon, 
   title, 
@@ -19,4 +18,4 @@ export default function EmptyState({
       )}
     </div>
   );
-}
+}

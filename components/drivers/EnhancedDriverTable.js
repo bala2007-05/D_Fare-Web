@@ -1,5 +1,4 @@
 'use client';
-
 import { useState, useMemo } from 'react';
 import { Search, Battery, Wifi, AlertTriangle, RefreshCw } from 'lucide-react';
 import Card, { CardHeader, CardContent, CardTitle } from '@/components/ui/Card';
@@ -8,24 +7,19 @@ import Input from '@/components/ui/Input';
 import Select from '@/components/ui/Select';
 import { driversEnhanced, DRIVER_STATUS } from '@/lib/enterpriseMockData';
 import { formatRelativeTime, cn } from '@/lib/utils';
-
 export default function EnhancedDriverTable({ onDriverClick }) {
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
   const [lastRefresh, setLastRefresh] = useState(new Date());
-
   const filteredDrivers = useMemo(() => {
     return driversEnhanced.filter((driver) => {
       const matchesSearch = 
         driver.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
         driver.driverId.toLowerCase().includes(searchQuery.toLowerCase());
-      
       const matchesStatus = statusFilter === 'all' || driver.status === statusFilter;
-      
       return matchesSearch && matchesStatus;
     });
   }, [searchQuery, statusFilter]);
-
   const getStatusColor = (status) => {
     const colors = {
       [DRIVER_STATUS.IDLE]: 'bg-success-100 text-success-700',
@@ -36,7 +30,6 @@ export default function EnhancedDriverTable({ onDriverClick }) {
     };
     return colors[status] || 'bg-slate-100 text-slate-600';
   };
-
   const getConnectivityStatus = (lastPing) => {
     const secondsSinceLastPing = (new Date() - new Date(lastPing)) / 1000;
     if (secondsSinceLastPing < 60) return { status: 'excellent', color: 'text-success-600' };
@@ -44,13 +37,11 @@ export default function EnhancedDriverTable({ onDriverClick }) {
     if (secondsSinceLastPing < 300) return { status: 'weak', color: 'text-warning-600' };
     return { status: 'poor', color: 'text-danger-600' };
   };
-
   const getBatteryColor = (level) => {
     if (level > 60) return 'text-success-600';
     if (level > 30) return 'text-warning-600';
     return 'text-danger-600';
   };
-
   return (
     <Card>
       <CardHeader>
@@ -71,7 +62,6 @@ export default function EnhancedDriverTable({ onDriverClick }) {
             </span>
           </button>
         </div>
-        
         {/* Filters */}
         <div className="flex items-center gap-3 mt-4">
           <div className="relative flex-1 max-w-md">
@@ -84,7 +74,6 @@ export default function EnhancedDriverTable({ onDriverClick }) {
               className="pl-9"
             />
           </div>
-          
           <Select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
@@ -98,7 +87,6 @@ export default function EnhancedDriverTable({ onDriverClick }) {
           </Select>
         </div>
       </CardHeader>
-
       <CardContent className="p-0">
         <div className="overflow-x-auto custom-scrollbar">
           <table className="w-full">
@@ -191,4 +179,4 @@ export default function EnhancedDriverTable({ onDriverClick }) {
       </CardContent>
     </Card>
   );
-}
+}

@@ -1,0 +1,10 @@
+alter table public.drivers add column if not exists assigned_hub text;
+alter table public.drivers add column if not exists vehicle_type text;
+alter table public.drivers add column if not exists license_expiry date;
+alter table public.drivers add column if not exists employment_type text;
+alter table public.drivers add column if not exists shift text;
+alter table public.drivers add column if not exists photo_url text;
+alter table public.drivers add column if not exists cod_limit numeric default 500;
+alter table public.drivers add column if not exists phone text;
+alter table public.drivers add column if not exists organization_id uuid;
+alter table public.drivers add column if not exists updated_at timestamptz default now();
