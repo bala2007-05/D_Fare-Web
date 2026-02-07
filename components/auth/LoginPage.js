@@ -1,28 +1,22 @@
 'use client';
-
 import { useState } from 'react';
 import { LogIn, Mail, Lock } from 'lucide-react';
 import { useProvider } from '@/lib/providerContext';
 import { useRole, ROLES } from '@/lib/roleContext';
-
 export default function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const { login } = useProvider();
   const { setCurrentRole } = useRole();
-
   const handleLogin = (e) => {
     e.preventDefault();
     if (!email || !password) {
       alert('Please fill in all fields');
       return;
     }
-    // Mock login - in real app, validate with backend
-    // Backend will check if org exists or needs onboarding
     login(email, password);
     setCurrentRole(ROLES.ADMIN); // Default role
   };
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 flex items-center justify-center p-4">
       <div className="w-full max-w-md">
@@ -35,14 +29,12 @@ export default function LoginPage() {
           <p className="text-slate-600">Fair Dispatch Management System</p>
           <p className="text-sm text-slate-500 mt-1">Multi-Provider Logistics Platform</p>
         </div>
-
         {/* Login Card */}
         <div className="bg-white rounded-2xl shadow-xl border border-slate-200 p-8">
           <div className="mb-6">
             <h2 className="text-xl font-bold text-slate-900">Service Provider Login</h2>
             <p className="text-sm text-slate-600 mt-1">Access your dispatch operations</p>
           </div>
-
           <form onSubmit={handleLogin} className="space-y-4">
             {/* Email */}
             <div>
@@ -59,7 +51,6 @@ export default function LoginPage() {
                 required
               />
             </div>
-
             {/* Password */}
             <div>
               <label className="block text-sm font-semibold text-slate-700 mb-2">
@@ -75,7 +66,6 @@ export default function LoginPage() {
                 required
               />
             </div>
-
             {/* Login Button */}
             <button
               type="submit"
@@ -85,7 +75,6 @@ export default function LoginPage() {
               Sign In
             </button>
           </form>
-
           {/* Demo Credentials */}
           <div className="mt-6 p-4 bg-slate-50 rounded-lg border border-slate-200">
             <p className="text-xs font-semibold text-slate-700 mb-2">Demo Credentials:</p>
@@ -95,7 +84,6 @@ export default function LoginPage() {
               <p>Password: <span className="font-mono">demo123</span></p>
             </div>
           </div>
-
           {/* Footer Links */}
           <div className="mt-6 text-center text-sm text-slate-500 space-y-2">
             <p>
@@ -115,7 +103,6 @@ export default function LoginPage() {
             </div>
           </div>
         </div>
-
         {/* Security Notice */}
         <div className="mt-6 text-center text-xs text-slate-500">
           <p>🔒 Secure enterprise authentication</p>
@@ -124,4 +111,4 @@ export default function LoginPage() {
       </div>
     </div>
   );
-}
+}

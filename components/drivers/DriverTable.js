@@ -1,5 +1,4 @@
 'use client';
-
 import { useState, useMemo } from 'react';
 import { Search, RefreshCw } from 'lucide-react';
 import Card, { CardHeader, CardContent, CardTitle } from '@/components/ui/Card';
@@ -8,24 +7,19 @@ import Input from '@/components/ui/Input';
 import Select from '@/components/ui/Select';
 import { driversEnhanced, DRIVER_STATUS } from '@/lib/enterpriseMockData';
 import { formatRelativeTime } from '@/lib/utils';
-
 export default function DriverTable({ onDriverClick, selectedDriver }) {
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
   const [lastRefresh, setLastRefresh] = useState(new Date());
-
   const filteredDrivers = useMemo(() => {
     return driversEnhanced.filter((driver) => {
       const matchesSearch = 
         driver.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
         driver.driverId.toLowerCase().includes(searchQuery.toLowerCase());
-      
       const matchesStatus = statusFilter === 'all' || driver.status === statusFilter;
-      
       return matchesSearch && matchesStatus;
     });
   }, [searchQuery, statusFilter]);
-
   return (
     <Card>
       <CardHeader>
@@ -46,7 +40,6 @@ export default function DriverTable({ onDriverClick, selectedDriver }) {
             </span>
           </button>
         </div>
-        
         {/* Filters */}
         <div className="flex items-center gap-3 mt-4">
           <div className="relative flex-1 max-w-md">
@@ -59,7 +52,6 @@ export default function DriverTable({ onDriverClick, selectedDriver }) {
               className="pl-9"
             />
           </div>
-          
           <Select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
@@ -73,7 +65,6 @@ export default function DriverTable({ onDriverClick, selectedDriver }) {
           </Select>
         </div>
       </CardHeader>
-
       <CardContent className="p-0">
         <div className="overflow-x-auto custom-scrollbar">
           <table className="w-full">
@@ -121,4 +112,4 @@ export default function DriverTable({ onDriverClick, selectedDriver }) {
       </CardContent>
     </Card>
   );
-}
+}

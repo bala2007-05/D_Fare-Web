@@ -1,5 +1,4 @@
 import { cn } from '@/lib/utils';
-
 export default function Select({ className, children, ...props }) {
   return (
     <select
@@ -11,7 +10,7 @@ export default function Select({ className, children, ...props }) {
         className
       )}
       style={{
-        color: '#0F2A47',
+        color: '#0f172a',
         ...props.style
       }}
       {...props}
@@ -19,4 +18,4 @@ export default function Select({ className, children, ...props }) {
       {children}
     </select>
   );
-}
+}

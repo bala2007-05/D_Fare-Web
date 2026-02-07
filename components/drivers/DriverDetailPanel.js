@@ -1,12 +1,9 @@
 'use client';
-
 import { X, User, Truck, Battery, Package, Star, Wifi, MapPin, Route, Clock } from 'lucide-react';
 import Badge from '@/components/ui/Badge';
 import { formatRelativeTime, cn } from '@/lib/utils';
-
 export default function DriverDetailPanel({ driver, onClose }) {
   if (!driver) return null;
-
   const getConnectivityStatus = (lastPing) => {
     const secondsSinceLastPing = (new Date() - new Date(lastPing)) / 1000;
     if (secondsSinceLastPing < 60) return { status: 'Excellent', color: 'text-success-600', bgColor: 'bg-success-100' };
@@ -14,15 +11,12 @@ export default function DriverDetailPanel({ driver, onClose }) {
     if (secondsSinceLastPing < 300) return { status: 'Weak', color: 'text-warning-600', bgColor: 'bg-warning-100' };
     return { status: 'Poor', color: 'text-danger-600', bgColor: 'bg-danger-100' };
   };
-
   const getBatteryColor = (level) => {
     if (level > 60) return 'text-success-600';
     if (level > 30) return 'text-warning-600';
     return 'text-danger-600';
   };
-
   const connectivity = getConnectivityStatus(driver.lastPingTimestamp);
-
   return (
     <div 
       className="fixed right-0 top-0 h-full w-full md:w-[480px] bg-white shadow-2xl border-l border-slate-200 z-50 overflow-y-auto driver-panel-enter"
@@ -50,7 +44,6 @@ export default function DriverDetailPanel({ driver, onClose }) {
           </button>
         </div>
       </div>
-
       {/* Driver Details Cards */}
       <div className="p-6 space-y-4">
         {/* Status Card */}
@@ -62,7 +55,6 @@ export default function DriverDetailPanel({ driver, onClose }) {
             </Badge>
           </div>
         </div>
-
         {/* Key Metrics Grid */}
         <div className="grid grid-cols-2 gap-3">
           {/* Battery */}
@@ -79,7 +71,6 @@ export default function DriverDetailPanel({ driver, onClose }) {
               </div>
             </div>
           </div>
-
           {/* Capacity */}
           <div className="bg-white rounded-xl p-4 border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
             <div className="flex items-center gap-3">
@@ -96,7 +87,6 @@ export default function DriverDetailPanel({ driver, onClose }) {
               </div>
             </div>
           </div>
-
           {/* Tasks Today */}
           <div className="bg-white rounded-xl p-4 border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
             <div className="flex items-center gap-3">
@@ -109,7 +99,6 @@ export default function DriverDetailPanel({ driver, onClose }) {
               </div>
             </div>
           </div>
-
           {/* Rating */}
           <div className="bg-white rounded-xl p-4 border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
             <div className="flex items-center gap-3">
@@ -123,7 +112,6 @@ export default function DriverDetailPanel({ driver, onClose }) {
             </div>
           </div>
         </div>
-
         {/* Additional Details */}
         <div className="bg-white rounded-xl border border-slate-200 shadow-sm">
           <div className="p-4 border-b border-slate-200 bg-slate-50">
@@ -137,7 +125,6 @@ export default function DriverDetailPanel({ driver, onClose }) {
               </div>
               <span className="text-sm font-mono font-semibold text-slate-900">{driver.vehicleId}</span>
             </div>
-
             <div className="flex items-center justify-between py-2 border-b border-slate-100">
               <div className="flex items-center gap-3">
                 <Route className="w-4 h-4 text-slate-400" />
@@ -147,7 +134,6 @@ export default function DriverDetailPanel({ driver, onClose }) {
                 {driver.currentRouteId || <span className="text-slate-400">Not assigned</span>}
               </span>
             </div>
-
             <div className="flex items-center justify-between py-2 border-b border-slate-100">
               <div className="flex items-center gap-3">
                 <Clock className="w-4 h-4 text-slate-400" />
@@ -157,7 +143,6 @@ export default function DriverDetailPanel({ driver, onClose }) {
                 {formatRelativeTime(driver.shiftStartTime)}
               </span>
             </div>
-
             <div className="flex items-center justify-between py-2">
               <div className="flex items-center gap-3">
                 <Wifi className="w-4 h-4 text-slate-400" />
@@ -174,7 +159,6 @@ export default function DriverDetailPanel({ driver, onClose }) {
             </div>
           </div>
         </div>
-
         {/* Performance Card */}
         <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl p-4 border border-blue-200 shadow-sm">
           <div className="flex items-center justify-between">
@@ -196,7 +180,6 @@ export default function DriverDetailPanel({ driver, onClose }) {
           </div>
         </div>
       </div>
-
       <style jsx>{`
         @keyframes slideIn {
           from {
@@ -214,4 +197,4 @@ export default function DriverDetailPanel({ driver, onClose }) {
       `}</style>
     </div>
   );
-}
+}

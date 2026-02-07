@@ -1,19 +1,15 @@
 'use client';
-
 import { useState } from 'react';
 import { AlertTriangle, X, Check, History } from 'lucide-react';
 import Card, { CardHeader, CardContent, CardTitle } from '@/components/ui/Card';
 import Select from '@/components/ui/Select';
 import { driversEnhanced, overrideHistory } from '@/lib/enterpriseMockData';
 import { formatDateTime } from '@/lib/utils';
-
 export default function ManualOverridePanel({ order, onClose, onSubmit }) {
   const [selectedDriver, setSelectedDriver] = useState('');
   const [reason, setReason] = useState('');
   const [customReason, setCustomReason] = useState('');
-
   if (!order) return null;
-
   const reasonOptions = [
     { value: 'proximity', label: 'Driver Proximity - Closest to pickup' },
     { value: 'skill_match', label: 'Skill Requirement Match' },
@@ -24,13 +20,11 @@ export default function ManualOverridePanel({ order, onClose, onSubmit }) {
     { value: 'route_optimization', label: 'Route Optimization' },
     { value: 'other', label: 'Other (Specify)' },
   ];
-
   const handleSubmit = () => {
     if (!selectedDriver || !reason || (reason === 'other' && !customReason)) {
       alert('Please fill in all required fields');
       return;
     }
-
     onSubmit && onSubmit({
       orderId: order.orderId,
       newDriver: selectedDriver,
@@ -38,12 +32,9 @@ export default function ManualOverridePanel({ order, onClose, onSubmit }) {
       timestamp: new Date().toISOString(),
     });
   };
-
-  // Get available drivers for override
   const availableDrivers = driversEnhanced.filter(d => 
     d.status !== 'offline' && d.driverId !== order.assignedDriver
   );
-
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
       <div className="w-full max-w-2xl bg-white rounded-lg shadow-2xl max-h-[90vh] overflow-y-auto">
@@ -61,7 +52,6 @@ export default function ManualOverridePanel({ order, onClose, onSubmit }) {
               <X className="w-5 h-5 text-slate-600" />
             </button>
           </div>
-          
           <div className="flex items-start gap-3 p-3 bg-warning-50 border border-warning-200 rounded-lg">
             <AlertTriangle className="w-5 h-5 text-warning-600 flex-shrink-0 mt-0.5" />
             <div className="flex-1">
@@ -75,7 +65,6 @@ export default function ManualOverridePanel({ order, onClose, onSubmit }) {
             </div>
           </div>
         </div>
-
         <div className="p-6 space-y-6">
           {/* Current Assignment */}
           <Card className="border-slate-300">
@@ -99,7 +88,6 @@ export default function ManualOverridePanel({ order, onClose, onSubmit }) {
               </div>
             </CardContent>
           </Card>
-
           {/* New Driver Selection */}
           <div>
             <label className="block text-sm font-semibold text-slate-900 mb-2">
@@ -118,7 +106,6 @@ export default function ManualOverridePanel({ order, onClose, onSubmit }) {
               ))}
             </Select>
           </div>
-
           {/* Reason Selection */}
           <div>
             <label className="block text-sm font-semibold text-slate-900 mb-2">
@@ -137,7 +124,6 @@ export default function ManualOverridePanel({ order, onClose, onSubmit }) {
               ))}
             </Select>
           </div>
-
           {/* Custom Reason (if "Other" selected) */}
           {reason === 'other' && (
             <div>
@@ -153,7 +139,6 @@ export default function ManualOverridePanel({ order, onClose, onSubmit }) {
               />
             </div>
           )}
-
           {/* Override History */}
           {overrideHistory.length > 0 && (
             <Card className="border-primary-200">
@@ -201,7 +186,6 @@ export default function ManualOverridePanel({ order, onClose, onSubmit }) {
               </CardContent>
             </Card>
           )}
-
           {/* Actions */}
           <div className="flex items-center gap-3 pt-4 border-t border-slate-200">
             <button
@@ -219,7 +203,6 @@ export default function ManualOverridePanel({ order, onClose, onSubmit }) {
               Confirm Override
             </button>
           </div>
-
           <p className="text-xs text-center text-slate-500 italic">
             This override will be logged and auditable by administrators
           </p>
@@ -227,4 +210,4 @@ export default function ManualOverridePanel({ order, onClose, onSubmit }) {
       </div>
     </div>
   );
-}
+}

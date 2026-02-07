@@ -1,9 +1,7 @@
 'use client';
-
 import { Info, Lightbulb } from 'lucide-react';
 import Card, { CardHeader, CardContent, CardTitle } from '@/components/ui/Card';
 import { explainabilityExample } from '@/lib/mockData';
-
 export default function ExplainabilityPanel() {
   return (
     <Card className="border-primary-200 bg-primary-50/30">
@@ -20,7 +18,6 @@ export default function ExplainabilityPanel() {
           </div>
         </div>
       </CardHeader>
-
       <CardContent className="space-y-6">
         {/* Example Assignment */}
         <div>
@@ -30,7 +27,6 @@ export default function ExplainabilityPanel() {
               Example: Task {explainabilityExample.taskId}
             </h4>
           </div>
-          
           <div className="bg-white rounded-lg border border-slate-200 p-4 mb-4">
             <div className="flex items-center justify-between mb-2">
               <span className="text-xs font-medium text-slate-600">Assigned to</span>
@@ -45,13 +41,11 @@ export default function ExplainabilityPanel() {
               </span>
             </div>
           </div>
-
           {/* Decision Factors */}
           <div className="space-y-3">
             <h5 className="text-xs font-semibold text-slate-700 uppercase tracking-wider">
               Decision Factors
             </h5>
-            
             {explainabilityExample.factors.map((factor, index) => (
               <div 
                 key={index}
@@ -78,7 +72,6 @@ export default function ExplainabilityPanel() {
                     </div>
                   </div>
                 </div>
-                
                 {/* Weight Bar */}
                 <div className="mt-3">
                   <div className="h-1.5 bg-slate-100 rounded-full overflow-hidden">
@@ -92,7 +85,6 @@ export default function ExplainabilityPanel() {
             ))}
           </div>
         </div>
-
         {/* Summary Explanation */}
         <div className="bg-slate-50 border border-slate-200 rounded-lg p-4">
           <div className="flex items-start gap-2">
@@ -107,7 +99,6 @@ export default function ExplainabilityPanel() {
             </div>
           </div>
         </div>
-
         {/* Read-Only Notice */}
         <div className="pt-4 border-t border-slate-200">
           <p className="text-xs text-slate-500 italic text-center">
@@ -118,4 +109,4 @@ export default function ExplainabilityPanel() {
       </CardContent>
     </Card>
   );
-}
+}

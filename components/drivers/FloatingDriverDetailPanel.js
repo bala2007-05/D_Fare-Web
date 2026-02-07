@@ -1,12 +1,10 @@
 'use client';
-
 import { X, User, Truck, Battery, Package, Star, Wifi, MapPin, Route, Clock } from 'lucide-react';
 import Badge from '@/components/ui/Badge';
 import { formatRelativeTime, cn } from '@/lib/utils';
-
+import { routes } from '@/lib/enterpriseMockData';
 export default function FloatingDriverDetailPanel({ driver, onClose }) {
   if (!driver) return null;
-
   const getConnectivityStatus = (lastPing) => {
     const secondsSinceLastPing = (new Date() - new Date(lastPing)) / 1000;
     if (secondsSinceLastPing < 60) return { status: 'Excellent', color: 'text-success-600', bgColor: 'bg-success-100' };
@@ -14,15 +12,20 @@ export default function FloatingDriverDetailPanel({ driver, onClose }) {
     if (secondsSinceLastPing < 300) return { status: 'Weak', color: 'text-warning-600', bgColor: 'bg-warning-100' };
     return { status: 'Poor', color: 'text-danger-600', bgColor: 'bg-danger-100' };
   };
-
   const getBatteryColor = (level) => {
     if (level > 60) return 'text-success-600';
     if (level > 30) return 'text-warning-600';
     return 'text-danger-600';
   };
-
   const connectivity = getConnectivityStatus(driver.lastPingTimestamp);
-
+  const driverRoutes = routes.filter((route) => route.driverId === driver.driverId);
+  const totalRoutesAssigned = driverRoutes.length;
+  const routesCompleted = driverRoutes.filter((route) => route.status === 'completed').length;
+  const activeRoute = driverRoutes.find((route) => route.status === 'in_progress') || null;
+  const currentStop =
+    activeRoute && activeRoute.stops && activeRoute.stops.length > 0
+      ? activeRoute.stops[activeRoute.sequenceNumber - 1]
+      : null;
   return (
     <div 
       className="driver-detail-panel"
@@ -89,7 +92,6 @@ export default function FloatingDriverDetailPanel({ driver, onClose }) {
           {driver.status.replace(/_/g, ' ')}
         </Badge>
       </div>
-
       {/* Scrollable Content */}
       <div style={{
         maxHeight: 'calc(100vh - 280px)',
@@ -111,7 +113,6 @@ export default function FloatingDriverDetailPanel({ driver, onClose }) {
             </div>
             <div className="text-lg font-bold text-slate-900">{driver.batteryLevel}%</div>
           </div>
-
           {/* Capacity */}
           <div style={{
             background: '#f9fafb',
@@ -127,7 +128,6 @@ export default function FloatingDriverDetailPanel({ driver, onClose }) {
             </div>
             <div className="text-lg font-bold text-slate-900">{driver.capacityUsed}%</div>
           </div>
-
           {/* Tasks */}
           <div style={{
             background: '#f9fafb',
@@ -141,7 +141,6 @@ export default function FloatingDriverDetailPanel({ driver, onClose }) {
             </div>
             <div className="text-lg font-bold text-slate-900">{driver.tasksToday}</div>
           </div>
-
           {/* Rating */}
           <div style={{
             background: '#f9fafb',
@@ -156,7 +155,6 @@ export default function FloatingDriverDetailPanel({ driver, onClose }) {
             <div className="text-lg font-bold text-slate-900">{driver.rating} ★</div>
           </div>
         </div>
-
         {/* Details List */}
         <div style={{
           background: '#f9fafb',
@@ -172,7 +170,6 @@ export default function FloatingDriverDetailPanel({ driver, onClose }) {
               </div>
               <span className="font-mono font-semibold text-slate-900">{driver.vehicleId}</span>
             </div>
-
             <div className="flex items-center justify-between py-1 text-xs border-b border-slate-200">
               <div className="flex items-center gap-2">
                 <Route className="w-3 h-3 text-slate-400" />
@@ -182,7 +179,6 @@ export default function FloatingDriverDetailPanel({ driver, onClose }) {
                 {driver.currentRouteId || <span className="text-slate-400">—</span>}
               </span>
             </div>
-
             <div className="flex items-center justify-between py-1 text-xs border-b border-slate-200">
               <div className="flex items-center gap-2">
                 <Clock className="w-3 h-3 text-slate-400" />
@@ -192,7 +188,6 @@ export default function FloatingDriverDetailPanel({ driver, onClose }) {
                 {formatRelativeTime(driver.shiftStartTime)}
               </span>
             </div>
-
             <div className="flex items-center justify-between py-1 text-xs">
               <div className="flex items-center gap-2">
                 <Wifi className="w-3 h-3 text-slate-400" />
@@ -204,7 +199,6 @@ export default function FloatingDriverDetailPanel({ driver, onClose }) {
             </div>
           </div>
         </div>
-
         {/* Performance */}
         <div style={{
           marginTop: '12px',
@@ -232,8 +226,85 @@ export default function FloatingDriverDetailPanel({ driver, onClose }) {
             </div>
           </div>
         </div>
+        {/* Route Overview (reusing Routes data inside driver view) */}
+        <div style={{
+          marginTop: '12px',
+          background: '#f9fafb',
+          borderRadius: '8px',
+          padding: '12px',
+          border: '1px solid #e5e7eb'
+        }}>
+          <div className="flex items-center justify-between mb-2">
+            <div className="flex items-center gap-2">
+              <Route className="w-4 h-4 text-slate-400" />
+              <span className="text-xs font-semibold text-slate-700 uppercase tracking-wide">
+                Route Overview
+              </span>
+            </div>
+            <span className="text-[11px] text-slate-500">
+              {totalRoutesAssigned} routes assigned
+            </span>
+          </div>
+          <div className="grid grid-cols-2 gap-3 mb-3 text-xs">
+            <div>
+              <div className="text-slate-500 mb-0.5">Routes Completed</div>
+              <div className="font-semibold text-slate-900">
+                {routesCompleted} / {totalRoutesAssigned || 0}
+              </div>
+            </div>
+            <div>
+              <div className="text-slate-500 mb-0.5">Active Route</div>
+              <div className="font-mono text-slate-900">
+                {activeRoute ? activeRoute.routeId : <span className="text-slate-400">—</span>}
+              </div>
+            </div>
+            <div>
+              <div className="text-slate-500 mb-0.5">Current Stop</div>
+              {activeRoute && currentStop ? (
+                <div className="text-slate-900 font-mono">
+                  {activeRoute.sequenceNumber} / {activeRoute.totalStops}{' '}
+                  <span className="block text-[11px] text-slate-500">
+                    {currentStop.orderId}
+                  </span>
+                </div>
+              ) : (
+                <div className="text-slate-400">No active stop</div>
+              )}
+            </div>
+            <div>
+              <div className="text-slate-500 mb-0.5">ETA Next Stop</div>
+              {activeRoute ? (
+                <div className="text-slate-900 font-medium">
+                  {formatRelativeTime(activeRoute.etaNextStop)}
+                </div>
+              ) : (
+                <div className="text-slate-400">—</div>
+              )}
+            </div>
+          </div>
+          {activeRoute && (
+            <div className="mt-2 rounded-md border border-slate-200 bg-white p-2">
+              <div className="flex items-center justify-between mb-1">
+                <span className="text-[11px] font-semibold text-slate-700 uppercase">
+                  Active Route Snapshot
+                </span>
+                <span className="text-[11px] text-slate-500">
+                  {activeRoute.distanceTraveled.toFixed(1)} /{' '}
+                  {activeRoute.totalDistance.toFixed(1)} km
+                </span>
+              </div>
+              <div className="w-full h-1.5 bg-slate-200 rounded-full overflow-hidden">
+                <div
+                  className="h-full bg-blue-500 rounded-full"
+                  style={{
+                    width: `${(activeRoute.distanceTraveled / activeRoute.totalDistance) * 100}%`,
+                  }}
+                />
+              </div>
+            </div>
+          )}
+        </div>
       </div>
-
       <style jsx>{`
         @keyframes fadeIn {
           from {

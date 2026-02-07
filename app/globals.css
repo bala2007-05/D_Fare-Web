@@ -1,62 +1,37 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-/* ============================================
-   D-FARE GLOBAL BRAND THEME
-   ============================================ */
-
-/* CSS Variables - Brand Colors */
 :root {
-  /* Primary Colors */
-  --primary-color: #0b1f3a;
-  --primary-dark: #050f23;
-  --primary-light: #1a3a5c;
-  
-  /* Secondary Colors - D-FARE Brand */
-  --secondary-color: #0F2A47;
-  --secondary-hover: #0c2239;
-  --secondary-light: #1a3a5c;
-  
-  /* Accent Colors - D-FARE Brand */
-  --accent-gold: #E2A94B;
-  --accent-gold-light: #F5C76B;
-  
-  /* Background Colors */
-  --card-bg: rgba(15, 23, 42, 0.85);
-  --card-bg-hover: rgba(15, 23, 42, 0.92);
-  --navbar-bg: linear-gradient(90deg, #0b1f3a, #0f172a);
-  --overlay-dark: rgba(5, 15, 35, 0.75);
-  
-  /* Text Colors */
-  --text-light: #f8fafc;
-  --text-muted: #cbd5e1;
-  --text-gray: #94a3b8;
-  --text-dark: #1e293b;
-  
-  /* Border & Shadow */
-  --border-color: rgba(255, 255, 255, 0.1);
-  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.2);
-  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.3);
-  --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.4);
-  --shadow-xl: 0 20px 50px rgba(0, 0, 0, 0.5);
+  --primary-bg: #ffffff;
+  --secondary-bg: #eff6ff;
+  --primary-button: #1f4fd8;
+  --button-hover: #2563eb;
+  --border-color: #dbeafe;
+  --text-primary: #0f172a;
+  --primary-color: #0f172a;
+  --primary-light: #1f4fd8;
+  --secondary-color: #1f4fd8;
+  --secondary-hover: #2563eb;
+  --accent: #1f4fd8;
+  --accent-light: #60a5fa;
+  --card-bg: #ffffff;
+  --card-bg-hover: #f8fafc;
+  --navbar-bg: #ffffff;
+  --text-light: #1f2933;
+  --text-muted: #6b7280;
+  --text-gray: #9ca3af;
+  --text-dark: #0f172a;
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.08);
+  --shadow-xl: 0 20px 40px rgba(0, 0, 0, 0.1);
 }
-
-/* ============================================
-   GLOBAL BACKGROUND
-   ============================================ */
-
 html {
   margin: 0;
   padding: 0;
   min-height: 100vh;
-  background-image: url('https://i.ibb.co/f3ZnjVq/Whats-App-Image-2026-01-31-at-4-34-40-PM.jpg');
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-attachment: fixed;
+  background: linear-gradient(180deg, #ffffff 0%, #eff6ff 100%);
 }
-
 body {
   margin: 0;
   padding: 0;
@@ -65,37 +40,35 @@ body {
   overflow-x: hidden;
   background: transparent;
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
-  color: var(--text-light);
+  color: var(--text-dark);
 }
-
-/* ============================================
-   NAVIGATION BAR
-   ============================================ */
-
+header {
+  background-color: #ffffff !important;
+  border-bottom: 1px solid #dbeafe;
+}
+header button {
+  background-color: #1f4fd8;
+  color: #ffffff;
+  border-radius: 8px;
+}
+header button:hover {
+  background-color: #2563eb;
+}
 nav,
 .navbar {
-  background: var(--navbar-bg) !important;
-  color: var(--text-light) !important;
-  backdrop-filter: blur(10px);
-  border-bottom: 1px solid var(--border-color);
-  box-shadow: var(--shadow-md);
+  background: transparent !important;
+  color: var(--text-dark) !important;
+  border: none;
 }
-
 nav a,
 .navbar a {
-  color: var(--text-light);
+  color: var(--text-dark);
   transition: color 0.3s ease;
 }
-
 nav a:hover,
 .navbar a:hover {
   color: var(--secondary-color);
 }
-
-/* ============================================
-   CARDS & PANELS - ADMIN THEME
-   ============================================ */
-
 .card,
 .panel,
 .driver-card,
@@ -103,184 +76,177 @@ nav a:hover,
 .detail-panel,
 [class*="card"]:not(.login-card):not(.registration-modal),
 [class*="panel"]:not(.login-page) {
-  background: #0F2A47 !important;
-  backdrop-filter: blur(8px);
+  background: #ffffff !important;
   border-radius: 12px;
-  color: white;
-  border: 1px solid rgba(226, 169, 75, 0.2);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  color: var(--text-dark);
+  border: 1px solid #dbeafe;
+  box-shadow: var(--shadow-sm);
   transition: all 0.3s ease;
 }
-
 .card:hover,
 .driver-card:hover {
-  box-shadow: 0 6px 20px rgba(226, 169, 75, 0.2);
-  border-color: rgba(226, 169, 75, 0.3);
+  box-shadow: var(--shadow-md);
+  border-color: #dbeafe;
 }
-
-/* White cards (special cases like map overlays) */
 .card-white,
 .floating-panel,
 .driver-detail-panel {
-  background: #0F2A47 !important;
-  color: white;
-  backdrop-filter: blur(12px);
-  box-shadow: 0 10px 30px rgba(0,0,0,0.4);
-  border: 1px solid rgba(226, 169, 75, 0.3);
+  background: #ffffff !important;
+  color: var(--text-dark);
+  box-shadow: var(--shadow-lg);
+  border: 1px solid #dbeafe;
 }
-
-/* ============================================
-   BUTTONS
-   ============================================ */
-
+button,
+.btn,
 .primary-btn,
 button[class*="primary"],
 .btn-primary {
-  background: var(--secondary-color);
-  color: white;
+  background-color: #1f4fd8;
+  color: #ffffff;
   border-radius: 8px;
   padding: 10px 20px;
   font-weight: 600;
   border: none;
   cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+  transition: all 0.2s ease;
 }
-
+button:hover,
+.btn:hover,
 .primary-btn:hover,
 button[class*="primary"]:hover,
 .btn-primary:hover {
-  background: var(--secondary-hover);
-  transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(37, 99, 235, 0.4);
+  background-color: #2563eb;
 }
-
 .secondary-btn,
 .btn-secondary {
   background: transparent;
-  color: var(--secondary-color);
-  border: 2px solid var(--secondary-color);
+  color: #1f4fd8;
+  border: 2px solid #1f4fd8;
   border-radius: 8px;
   padding: 10px 20px;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.2s ease;
 }
-
 .secondary-btn:hover,
 .btn-secondary:hover {
-  background: var(--secondary-color);
-  color: white;
-  transform: translateY(-2px);
+  background: #1f4fd8;
+  color: #ffffff;
 }
-
-.gold-btn,
-.btn-gold {
-  background: linear-gradient(135deg, var(--accent-gold-light), var(--accent-gold));
-  color: var(--primary-dark);
+.btn-accent {
+  background-color: #1f4fd8;
+  color: #ffffff;
   border-radius: 8px;
   padding: 10px 20px;
   font-weight: 600;
   border: none;
   cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 12px rgba(212, 160, 23, 0.3);
+  transition: all 0.2s ease;
 }
-
-.gold-btn:hover,
-.btn-gold:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(212, 160, 23, 0.4);
+.btn-accent:hover {
+  background-color: #2563eb;
 }
-
-/* ============================================
-   LINKS & HIGHLIGHTS
-   ============================================ */
-
 a {
   color: var(--secondary-color);
   text-decoration: none;
   transition: color 0.3s ease;
 }
-
 a:hover {
   color: var(--secondary-light);
   text-decoration: underline;
 }
-
 .highlight,
 .text-highlight {
   color: var(--secondary-color);
   font-weight: 600;
 }
-
-/* ============================================
-   FORMS & INPUTS
-   ============================================ */
-
 input,
 textarea,
 select {
-  background: rgba(15, 23, 42, 0.7);
-  border: 1px solid var(--border-color);
+  background: #ffffff;
+  border: 1px solid #dbeafe;
   border-radius: 8px;
   padding: 10px 14px;
-  color: var(--text-light);
-  transition: all 0.3s ease;
+  color: #0f172a;
+  transition: all 0.2s ease;
 }
-
 input:focus,
 textarea:focus,
 select:focus {
   outline: none;
-  border-color: var(--secondary-color);
-  box-shadow: 0 0 0 3px rgba(15, 42, 71, 0.2);
-  background: rgba(15, 23, 42, 0.9);
+  border-color: #1f4fd8;
+  box-shadow: 0 0 0 3px rgba(31, 79, 216, 0.2);
+  background: #ffffff;
 }
-
 input::placeholder,
 textarea::placeholder,
 select::placeholder {
-  color: #0F2A47;
-  opacity: 0.7;
+  color: var(--text-gray);
 }
-
-/* ============================================
-   MAP PANEL
-   ============================================ */
-
 .map-panel,
 #logistics-map,
 #driver-map {
   box-shadow: var(--shadow-lg);
   border-radius: 14px;
   overflow: hidden;
-  border: 2px solid var(--border-color);
+  border: 1px solid #dbeafe;
 }
-
-/* Leaflet popup styling */
-.leaflet-popup-content-wrapper {
-  background: rgba(255, 255, 255, 0.98);
-  backdrop-filter: blur(10px);
-  border-radius: 12px;
-  box-shadow: var(--shadow-xl);
+.auth-page {
+  display: flex;
+  height: 100vh;
+  min-height: 100vh;
+  width: 100%;
+  max-width: 100vw;
+  background: #ffffff;
+  overflow: hidden;
 }
-
-.leaflet-popup-tip {
-  background: rgba(255, 255, 255, 0.98);
-  backdrop-filter: blur(10px);
+.auth-left {
+  flex: 1;
+  position: relative;
+  min-width: 0;
+  height: 100%;
+  padding: 0;
+  margin: 0;
+  overflow: hidden;
 }
-
-/* ============================================
-   LOGIN & AUTH PAGES
-   ============================================ */
-
+.auth-left img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+  position: absolute;
+  inset: 0;
+}
+.auth-right {
+  flex: 1;
+  min-width: 0;
+  width: 0;
+  height: 100%;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  background: #ffffff;
+  overflow-x: hidden;
+  overflow-y: auto;
+  padding: 20px 20px 24px;
+  box-sizing: border-box;
+}
+@media (max-width: 768px) {
+  .auth-left {
+    display: none;
+  }
+  .auth-right {
+    flex: 1;
+    width: 100%;
+    min-width: 0;
+    padding: 16px 20px;
+  }
+}
 .login-page {
   min-height: 100vh;
-  background-image: url('https://i.ibb.co/f3ZnjVq/Whats-App-Image-2026-01-31-at-4-34-40-PM.jpg');
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
+  overflow-y: auto;
+  background: #ffffff;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -288,28 +254,22 @@ select::placeholder {
   text-align: center;
   position: relative;
 }
-
-/* Dark overlay for contrast and readability */
-.login-page::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.45);
-  z-index: 0;
-}
-
 .login-logo {
-  width: 180px;
+  width: 140px;
   height: auto;
-  margin-bottom: 2px;
+  margin-bottom: 0;
   display: block;
   filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.5));
   position: relative;
   z-index: 1;
 }
-
+.dashboard-logo {
+  width: 140px !important;
+  height: auto !important;
+  object-fit: contain;
+}
 .login-subtitle {
-  color: #0F2A47;
+  color: #1d4ed8;
   font-size: 22px;
   font-weight: 600;
   margin-top: 0;
@@ -321,127 +281,144 @@ select::placeholder {
   position: relative;
   z-index: 1;
 }
-
 .login-card,
 .auth-card,
 .registration-modal {
   position: relative;
   z-index: 1;
-  background: #0F2A47 !important;
-  border-radius: 16px;
-  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.5);
-  border: 2px solid rgba(226, 169, 75, 0.2);
-  padding: 32px;
   width: 100%;
-  max-width: 380px;
+  max-width: 420px;
+  min-width: 0;
+  max-height: calc(100vh - 48px);
+  padding: 16px 24px 20px;
+  background: #ffffff !important;
+  border-radius: 16px;
+  border: 1px solid #dbeafe;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.06);
   margin: 0 auto;
-  color: white;
+  color: #0f172a;
+  overflow-x: hidden;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
 }
-
+.login-card > * {
+  margin-bottom: 8px;
+}
+.login-card > *:last-child {
+  margin-bottom: 0;
+}
+.login-card input,
+.login-card button,
+.login-card form {
+  max-width: 100%;
+}
+.login-input,
 .login-card input,
 .auth-card input {
-  background: #0c2239;
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  color: white;
+  background: #1e3a5f;
+  border: 1px solid #2d4a6f;
+  color: #ffffff;
 }
-
+.login-input:focus,
 .login-card input:focus,
 .auth-card input:focus {
-  border-color: #E2A94B;
-  box-shadow: 0 0 0 2px rgba(226, 169, 75, 0.3);
-  background: #0c2239;
+  border-color: #1f4fd8;
+  box-shadow: 0 0 0 3px rgba(31, 79, 216, 0.35);
+  background: #1e3a5f;
   outline: none;
 }
-
+.login-input::placeholder,
 .login-card input::placeholder,
 .auth-card input::placeholder {
-  color: rgba(255, 255, 255, 0.4);
+  color: rgba(255, 255, 255, 0.5);
 }
-
+.login-submit-btn:hover:not(:disabled) {
+  background: #2563eb !important;
+}
+.registration-next-btn:hover:not(:disabled) {
+  background: #1f4fd8 !important;
+  color: #ffffff !important;
+}
+.registration-flow input,
+.registration-flow select,
+.registration-flow textarea {
+  background: #1e3a5f !important;
+  border: 1px solid #2d4a6f !important;
+  color: #ffffff !important;
+  border-radius: 8px;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.registration-flow input:focus,
+.registration-flow select:focus,
+.registration-flow textarea:focus {
+  border-color: #1f4fd8 !important;
+  box-shadow: 0 0 0 3px rgba(31, 79, 216, 0.35) !important;
+  outline: none;
+}
+.registration-flow input::placeholder,
+.registration-flow textarea::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
 .login-btn {
-  background: #0F2A47;
-  color: white;
+  background-color: #1f4fd8;
+  color: #ffffff;
   border-radius: 8px;
   font-weight: 600;
-  box-shadow: 0 4px 12px rgba(15, 42, 71, 0.4);
-  transition: all 0.3s ease;
+  transition: all 0.2s ease;
   border: none;
 }
-
 .login-btn:hover:not(:disabled) {
-  background: #0c2239;
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(15, 42, 71, 0.5);
+  background-color: #2563eb;
 }
-
 .login-card h1,
 .login-card h2,
 .auth-card h1,
 .auth-card h2 {
-  color: #E2A94B;
+  color: #0f172a;
   font-weight: 600;
 }
-
 .login-card label,
 .auth-card label {
-  color: #E2A94B;
+  color: #0f172a;
   font-weight: 500;
   text-align: left;
 }
-
 .login-card form,
 .auth-card form {
   text-align: left;
 }
-
 .register-link,
 .login-card a,
 .auth-card a {
-  color: #E2A94B;
+  color: #1f4fd8;
   font-weight: 600;
-  transition: color 0.3s ease;
+  transition: color 0.2s ease;
 }
-
 .register-link:hover,
 .login-card a:hover,
 .auth-card a:hover {
-  color: #d1963a;
+  color: #2563eb;
 }
-
 .login-card button:hover,
 .auth-card button:hover {
-  background: var(--secondary-hover);
+  background-color: #2563eb;
 }
-
-/* ============================================
-   DASHBOARD SPECIFIC
-   ============================================ */
-
 .dashboard-container {
-  background: #0F2A47;
-  backdrop-filter: blur(8px);
-  border: 1px solid rgba(226, 169, 75, 0.2);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  background: #eff6ff;
+  border: 1px solid #dbeafe;
+  box-shadow: var(--shadow-sm);
 }
-
 .driver-list-panel {
-  background: var(--card-bg);
-  backdrop-filter: blur(8px);
-  border-right: 1px solid var(--border-color);
+  background: #ffffff;
+  border-right: 1px solid #dbeafe;
 }
-
 .sidebar,
 .main-layout-sidebar {
-  background: var(--primary-color);
-  backdrop-filter: blur(10px);
-  border-right: 1px solid var(--border-color);
-  box-shadow: var(--shadow-lg);
+  background: #eff6ff;
+  border-right: 1px solid #dbeafe;
 }
-
-/* ============================================
-   BADGES & STATUS INDICATORS
-   ============================================ */
-
 .badge,
 .status-badge {
   border-radius: 6px;
@@ -451,97 +428,66 @@ select::placeholder {
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
-
 .badge-primary {
-  background: rgba(37, 99, 235, 0.2);
-  color: var(--secondary-color);
-  border: 1px solid rgba(37, 99, 235, 0.4);
+  background: rgba(31, 79, 216, 0.15);
+  color: #1f4fd8;
+  border: 1px solid #dbeafe;
 }
-
 .badge-success {
   background: rgba(16, 185, 129, 0.2);
   color: #10b981;
   border: 1px solid rgba(16, 185, 129, 0.4);
 }
-
 .badge-warning {
   background: rgba(245, 158, 11, 0.2);
   color: #f59e0b;
   border: 1px solid rgba(245, 158, 11, 0.4);
 }
-
 .badge-danger {
   background: rgba(255, 100, 100, 0.2);
   color: white;
   border: 1px solid rgba(255, 100, 100, 0.3);
 }
-
-/* ============================================
-   TABLES
-   ============================================ */
-
 table {
   background: transparent;
   color: var(--text-light);
 }
-
 thead {
-  background: rgba(226, 169, 75, 0.1);
-  border-bottom: 2px solid rgba(226, 169, 75, 0.2);
+  background: #eff6ff;
+  border-bottom: 2px solid #dbeafe;
 }
-
 thead th {
-  color: #E2A94B;
+  color: #0f172a;
   font-weight: 600;
   text-transform: uppercase;
   font-size: 11px;
   letter-spacing: 0.5px;
 }
-
 tbody tr {
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  border-bottom: 1px solid var(--border-color);
   transition: background 0.2s ease;
 }
-
 tbody tr:hover {
-  background: rgba(226, 169, 75, 0.05);
+  background: #eff6ff;
 }
-
 td {
-  color: white;
+  color: var(--text-dark);
 }
-
-/* ============================================
-   SCROLLBARS
-   ============================================ */
-
-.custom-scrollbar::-webkit-scrollbar,
-*::-webkit-scrollbar {
+.custom-scrollbar::-webkit-scrollbar {
   width: 8px;
   height: 8px;
 }
-
-.custom-scrollbar::-webkit-scrollbar-track,
-*::-webkit-scrollbar-track {
-  background: rgba(15, 23, 42, 0.4);
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: #eff6ff;
   border-radius: 4px;
 }
-
-.custom-scrollbar::-webkit-scrollbar-thumb,
-*::-webkit-scrollbar-thumb {
-  background: rgba(37, 99, 235, 0.6);
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #dbeafe;
   border-radius: 4px;
 }
-
-.custom-scrollbar::-webkit-scrollbar-thumb:hover,
-*::-webkit-scrollbar-thumb:hover {
-  background: var(--secondary-color);
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #1f4fd8;
 }
-
-/* ============================================
-   ANIMATIONS
-   ============================================ */
-
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -552,11 +498,9 @@ td {
     transform: translateY(0);
   }
 }
-
 .animate-fade-in {
   animation: fadeIn 0.5s ease-out;
 }
-
 @keyframes slideIn {
   from {
     opacity: 0;
@@ -567,11 +511,9 @@ td {
     transform: translateX(0);
   }
 }
-
 .animate-slide-in {
   animation: slideIn 0.5s ease-out;
 }
-
 @keyframes pulse {
   0%, 100% {
     opacity: 1;
@@ -582,82 +524,53 @@ td {
     transform: scale(1.05);
   }
 }
-
 .animate-pulse {
   animation: pulse 2s ease-in-out infinite;
 }
-
-/* ============================================
-   UTILITY CLASSES
-   ============================================ */
-
 .glass-effect {
   background: var(--card-bg);
   backdrop-filter: blur(8px);
   border: 1px solid var(--border-color);
 }
-
 .glass-effect-white {
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(12px);
   border: 1px solid rgba(255, 255, 255, 0.3);
 }
-
 .text-primary {
   color: var(--secondary-color);
 }
-
-.text-gold {
-  color: var(--accent-gold);
+.text-accent {
+  color: var(--secondary-color);
 }
-
 .bg-primary {
-  background: var(--primary-color);
+  background: #1f4fd8;
 }
-
 .bg-secondary {
-  background: var(--secondary-color);
+  background: #eff6ff;
 }
-
 .border-primary {
-  border-color: var(--border-color);
+  border-color: #dbeafe;
 }
-
 .shadow-brand {
   box-shadow: var(--shadow-lg);
 }
-
 .rounded-brand {
   border-radius: 12px;
 }
-
-/* ============================================
-   RESPONSIVE ADJUSTMENTS
-   ============================================ */
-
 @media (max-width: 768px) {
-  body::before {
-    background: rgba(5, 15, 35, 0.85);
-  }
-  
   .card,
   .panel {
     backdrop-filter: blur(12px);
-    background: rgba(15, 23, 42, 0.95);
+    background: #ffffff !important;
   }
-  
   .login-card,
   .auth-card {
     padding: 24px;
-    background: #0F2A47 !important;
+    background: #ffffff !important;
   }
 }
-
 @media (max-width: 480px) {
-  body::before {
-    background: rgba(5, 15, 35, 0.9);
-  }
-  
   input,
   textarea,
   select,
@@ -665,33 +578,21 @@ td {
     font-size: 14px;
   }
 }
-
-/* ============================================
-   PRINT STYLES
-   ============================================ */
-
 @media print {
   body::before,
   body::after {
     display: none;
   }
-  
   body {
     background: white;
     color: black;
   }
 }
-
-/* ============================================
-   DARK MODE OVERRIDES (if needed)
-   ============================================ */
-
 [data-theme="dark"] {
   --text-light: #f8fafc;
   --text-muted: #cbd5e1;
-  --card-bg: rgba(15, 23, 42, 0.9);
+  --card-bg: #ffffff;
 }
-
 [data-theme="light"] {
   --text-light: #1e293b;
   --text-muted: #64748b;

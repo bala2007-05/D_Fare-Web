@@ -1,11 +1,8 @@
 'use client';
-
 import { motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
-
 export default function LogisticsBackground() {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-
   useEffect(() => {
     const handleMouseMove = (e) => {
       setMousePosition({
@@ -13,11 +10,9 @@ export default function LogisticsBackground() {
         y: (e.clientY / window.innerHeight - 0.5) * 20,
       });
     };
-
     window.addEventListener('mousemove', handleMouseMove);
     return () => window.removeEventListener('mousemove', handleMouseMove);
   }, []);
-
   return (
     <div className="fixed inset-0 overflow-hidden">
       {/* Base warehouse image layer */}
@@ -33,7 +28,6 @@ export default function LogisticsBackground() {
         }}
         transition={{ type: 'spring', stiffness: 50, damping: 30 }}
       />
-
       {/* Warehouse grid pattern */}
       <div className="absolute inset-0 opacity-10">
         <svg width="100%" height="100%">
@@ -45,7 +39,6 @@ export default function LogisticsBackground() {
           <rect width="100%" height="100%" fill="url(#warehouse-grid)" />
         </svg>
       </div>
-
       {/* Ambient light streaks */}
       <motion.div
         className="absolute top-0 right-0 w-1/3 h-full opacity-20"
@@ -63,10 +56,8 @@ export default function LogisticsBackground() {
           ease: 'linear',
         }}
       />
-
       {/* Gradient overlay - darkening effect */}
       <div className="absolute inset-0 bg-gradient-to-br from-slate-900/90 via-slate-900/80 to-blue-900/90" />
-
       {/* Subtle noise texture */}
       <div
         className="absolute inset-0 opacity-5"
@@ -74,10 +65,8 @@ export default function LogisticsBackground() {
           backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' /%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' /%3E%3C/svg%3E")`,
         }}
       />
-
       {/* Bottom gradient fade */}
       <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-slate-950 to-transparent" />
-
       {/* Subtle moving scanlines */}
       <motion.div
         className="absolute inset-0 pointer-events-none"
@@ -96,4 +85,4 @@ export default function LogisticsBackground() {
       />
     </div>
   );
-}
+}

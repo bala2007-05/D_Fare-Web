@@ -1,5 +1,4 @@
 'use client';
-
 import { useState } from 'react';
 import { 
   LayoutDashboard, 
@@ -9,7 +8,6 @@ import {
   Activity 
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
-
 const navigation = [
   { name: 'Dashboard', href: '#dashboard', icon: LayoutDashboard },
   { name: 'Drivers', href: '#drivers', icon: Users },
@@ -17,10 +15,8 @@ const navigation = [
   { name: 'Fairness Analytics', href: '#analytics', icon: BarChart3 },
   { name: 'System Status', href: '#status', icon: Activity },
 ];
-
 export default function Sidebar() {
   const [activeTab, setActiveTab] = useState('Dashboard');
-
   return (
     <aside className="fixed left-0 top-0 h-screen w-64 bg-white border-r border-slate-200 flex flex-col z-10">
       {/* Logo / Brand */}
@@ -35,13 +31,11 @@ export default function Sidebar() {
           </div>
         </div>
       </div>
-
       {/* Navigation */}
       <nav className="flex-1 px-4 py-6 space-y-1">
         {navigation.map((item) => {
           const Icon = item.icon;
           const isActive = activeTab === item.name;
-          
           return (
             <a
               key={item.name}
@@ -63,7 +57,6 @@ export default function Sidebar() {
           );
         })}
       </nav>
-
       {/* Footer Info */}
       <div className="px-6 py-4 border-t border-slate-200">
         <div className="text-xs text-slate-500 space-y-1">
@@ -74,4 +67,4 @@ export default function Sidebar() {
       </div>
     </aside>
   );
-}
+}

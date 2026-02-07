@@ -1,13 +1,16 @@
-/** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [
-    './pages/**/*.{js,jsx}',
-    './components/**/*.{js,jsx}',
-    './app/**/*.{js,jsx}',
+    './pages/**/*.{js,jsx,ts,tsx}',
+    './components/**/*.{js,jsx,ts,tsx}',
+    './app/**/*.{js,jsx,ts,tsx}',
   ],
   theme: {
     extend: {
       colors: {
+        brand: {
+          blue: '#1d4ed8',
+          'blue-hover': '#2563EB',
+        },
         primary: {
           50: '#f0f9ff',
           100: '#e0f2fe',
@@ -59,4 +62,4 @@ module.exports = {
     },
   },
   plugins: [],
-}
+}

@@ -1,5 +1,4 @@
 import { cn } from '@/lib/utils';
-
 export default function Input({ className, ...props }) {
   return (
     <input
@@ -11,10 +10,10 @@ export default function Input({ className, ...props }) {
         className
       )}
       style={{
-        color: '#0F2A47',
+        color: '#0f172a',
         ...props.style
       }}
       {...props}
     />
   );
-}
+}
